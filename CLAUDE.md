@@ -46,16 +46,24 @@ los módulos de `/features`; no debería contener lógica de negocio.
 Supabase (Postgres + Auth) es el único backend — no hay backend propio
 (sin API routes de servidor propias salvo que sea estrictamente
 necesario). Cada módulo habla con Supabase a través de su propio
-`api.ts`, usando un cliente compartido definido en `/core/lib`.
+`api.ts`, usando los clientes compartidos definidos en `/core/lib`:
 
-### Variables de entorno (pendientes, no configuradas aún)
+- `core/lib/supabase-client.ts` — cliente para Client Components (browser).
+- `core/lib/supabase-server.ts` — cliente para Server Components / route handlers.
+- `core/lib/supabase-middleware.ts` — refresco de sesión y protección de rutas,
+  usado desde `middleware.ts` en la raíz.
+- `core/lib/auth.ts` — helpers de autenticación (`signInWithPassword`,
+  `signUpWithPassword`, `signOut`) usados por `/(auth)/login` y `/(auth)/register`.
+
+### Variables de entorno
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
 
-Estas variables se agregarán en una sesión futura, junto con la
-integración de Supabase Auth. Por ahora el proyecto no tiene backend
-conectado.
+Configuradas en `.env.local` (excluido de git). Auth ya está conectado:
+`/login` y `/register` usan Supabase Auth (email + password) y las rutas
+de `/(dashboard)` (`/habits`, `/finance`, `/watchlist`) están protegidas
+por el middleware — redirigen a `/login` si no hay sesión.
 
 ## Testing
 

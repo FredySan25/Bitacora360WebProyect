@@ -1,26 +1,62 @@
 @import "tailwindcss";
 
+/* Bitácora360 palette — "logbook": warm paper, ink and a rust accent */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --paper: #faf6ee;
+  --paper-elevated: #fffdf8;
+  --ink: #2b2418;
+  --ink-muted: #6b6152;
+  --accent: #b3521c;
+  --accent-hover: #9a4517;
+  --accent-foreground: #fffdf8;
+  --border: #e4dcc8;
+  --rule: #d8c9a9;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --paper: #1c1710;
+    --paper-elevated: #262019;
+    --ink: #f1e9d8;
+    --ink-muted: #a89b83;
+    --accent: #e08942;
+    --accent-hover: #ec9c5a;
+    --accent-foreground: #1c1710;
+    --border: #3a3225;
+    --rule: #362f22;
   }
 }
 
+@theme inline {
+  --color-background: var(--paper);
+  --color-foreground: var(--ink);
+  --color-paper: var(--paper);
+  --color-paper-elevated: var(--paper-elevated);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-rule: var(--rule);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-display: var(--font-logbook-serif);
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Subtle ruled-notebook texture for logbook-style backgrounds */
+.bg-notebook-lines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 27px,
+    var(--rule) 27px,
+    var(--rule) 28px
+  );
 }

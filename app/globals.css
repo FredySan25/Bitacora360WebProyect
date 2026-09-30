@@ -42,6 +42,7 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-display: var(--font-logbook-serif);
+  --shadow-card: 0 1px 2px rgb(43 36 24 / 0.06), 0 8px 24px rgb(43 36 24 / 0.06);
 }
 
 body {
@@ -50,13 +51,49 @@ body {
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 
-/* Subtle ruled-notebook texture for logbook-style backgrounds */
+@layer base {
+  /* Visible focus for keyboard users on every link/button; inputs use their own ring */
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+}
+
+/*
+ * Ruled-notebook texture for logbook-style backgrounds. The lines fade out
+ * behind the centered content so they don't compete with the text, and on
+ * wider screens a margin rule is drawn on the left, like a real notebook.
+ */
 .bg-notebook-lines {
-  background-image: repeating-linear-gradient(
+  position: relative;
+  isolation: isolate;
+}
+
+.bg-notebook-lines::before {
+  --notebook-rules: repeating-linear-gradient(
     to bottom,
-    transparent 0,
-    transparent 27px,
-    var(--rule) 27px,
-    var(--rule) 28px
+    transparent 0 27px,
+    color-mix(in oklab, var(--rule) 75%, transparent) 27px 28px
   );
+
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: var(--notebook-rules);
+  mask-image: radial-gradient(ellipse 55% 50% at 50% 45%, rgb(0 0 0 / 0.2), #000);
+}
+
+@media (min-width: 768px) {
+  .bg-notebook-lines::before {
+    background-image:
+      linear-gradient(
+        to right,
+        transparent 72px,
+        color-mix(in oklab, var(--accent) 35%, transparent) 72px 73px,
+        transparent 73px
+      ),
+      var(--notebook-rules);
+  }
 }

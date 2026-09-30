@@ -1,3 +1,5 @@
+import { PageHeader } from "@/core/components/PageHeader";
+
 export default function FinancePage() {
-  return <div>Finance</div>;
+  return <PageHeader title="Finanzas" description="Tus ingresos y gastos del mes." />;
 }

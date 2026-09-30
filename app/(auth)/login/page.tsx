@@ -27,7 +27,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/habits");
+    router.push("/today");
     router.refresh();
   }
 

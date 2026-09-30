@@ -1,7 +1,7 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-const DASHBOARD_PREFIXES = ["/habits", "/finance", "/watchlist"];
+const DASHBOARD_PREFIXES = ["/today", "/habits", "/finance", "/watchlist"];
 const AUTH_PATHS = ["/login", "/register"];
 
 export async function updateSession(request: NextRequest) {
@@ -46,7 +46,7 @@ export async function updateSession(request: NextRequest) {
 
   if (user && isAuthPath) {
     const url = request.nextUrl.clone();
-    url.pathname = "/habits";
+    url.pathname = "/today";
     return NextResponse.redirect(url);
   }
 

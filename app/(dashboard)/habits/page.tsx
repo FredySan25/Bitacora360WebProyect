@@ -1,3 +1,5 @@
+import { PageHeader } from "@/core/components/PageHeader";
+
 export default function HabitsPage() {
-  return <div>Habits</div>;
+  return <PageHeader title="Hábitos" description="Tu rutina diaria y el gym, día a día." />;
 }

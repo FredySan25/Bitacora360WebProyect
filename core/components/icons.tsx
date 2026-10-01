@@ -111,3 +111,69 @@ export function ArrowRightIcon(props: IconProps) {
     </BaseIcon>
   );
 }
+
+export function ChevronLeftIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M14.5 6l-6 6 6 6" />
+    </BaseIcon>
+  );
+}
+
+export function ChevronRightIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M9.5 6l6 6-6 6" />
+    </BaseIcon>
+  );
+}
+
+export function CheckIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M5.5 12.5l4.2 4.2 8.8-9.2" />
+    </BaseIcon>
+  );
+}
+
+export function PlusIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M12 5v14M5 12h14" />
+    </BaseIcon>
+  );
+}
+
+export function CloseIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M6 6l12 12M18 6L6 18" />
+    </BaseIcon>
+  );
+}
+
+export function PencilIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M4.5 19.5l1-4.2L16.2 4.6a1.6 1.6 0 0 1 2.3 0l.9.9a1.6 1.6 0 0 1 0 2.3L8.7 18.5z" />
+      <path d="M14.5 6.5l3 3" />
+    </BaseIcon>
+  );
+}
+
+export function TrashIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M4.5 7h15M9.5 7V4.8h5V7M6.5 7l.8 12.2h9.4L17.5 7" />
+      <path d="M10 10.5v5.5M14 10.5v5.5" />
+    </BaseIcon>
+  );
+}
+
+export function FlameIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M12 3.5c.6 3.2 5.5 5.6 5.5 10.4a5.5 5.5 0 0 1-11 0c0-1.9.9-3.4 2-4.6.3 1.5 1 2.4 2 2.9-.4-3 .1-6.3 1.5-8.7z" />
+    </BaseIcon>
+  );
+}

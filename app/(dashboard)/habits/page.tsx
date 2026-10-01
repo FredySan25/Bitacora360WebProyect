@@ -1,5 +1,5 @@
-import { PageHeader } from "@/core/components/PageHeader";
+import { HabitsBoard } from "@/features/habits/components/HabitsBoard";
 
 export default function HabitsPage() {
-  return <PageHeader title="Hábitos" description="Tu rutina diaria y el gym, día a día." />;
+  return <HabitsBoard />;
 }

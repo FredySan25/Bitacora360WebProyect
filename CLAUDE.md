@@ -41,6 +41,15 @@ los módulos de `/features`; no debería contener lógica de negocio.
   (`features/habits/api.ts`), que encapsula las queries a Supabase para
   ese módulo. Ningún otro módulo debe importar el `api.ts` de otro.
 
+## Módulo de hábitos
+
+Rutas: `/habits` (checklist diario y gestión de hábitos), `/habits/progress`
+(rachas y gráficas) y `/habits/gym` (log de entrenamientos: series/reps/peso).
+Los datos se cargan en el cliente con los hooks `useHabits` y `useWorkouts`.
+Los días se manejan como strings `YYYY-MM-DD` en la zona horaria del usuario
+(`features/habits/dates.ts`), nunca como instantes UTC. Las gráficas son
+SVG/CSS propios, sin librería de charts.
+
 ## Backend
 
 Supabase (Postgres + Auth) es el único backend — no hay backend propio
@@ -54,6 +63,16 @@ necesario). Cada módulo habla con Supabase a través de su propio
   usado desde `middleware.ts` en la raíz.
 - `core/lib/auth.ts` — helpers de autenticación (`signInWithPassword`,
   `signUpWithPassword`, `signOut`) usados por `/(auth)/login` y `/(auth)/register`.
+
+### Esquema de base de datos
+
+Los cambios de esquema (tablas, políticas RLS) se versionan como archivos
+SQL en `supabase/migrations/`, uno por cambio, con el prefijo de versión
+que Supabase registra al aplicarlo (`20261001021358_habits_module.sql`).
+Toda tabla lleva `user_id` y RLS activado: cada usuario solo ve y modifica
+sus propias filas. Además de la política RLS, cada tabla necesita un
+`grant select, insert, update, delete ... to authenticated`; sin él la
+API responde "permission denied" aunque la política exista.
 
 ### Variables de entorno
 

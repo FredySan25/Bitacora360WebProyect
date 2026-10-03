@@ -62,7 +62,25 @@ necesario). Cada módulo habla con Supabase a través de su propio
 - `core/lib/supabase-middleware.ts` — refresco de sesión y protección de rutas,
   usado desde `middleware.ts` en la raíz.
 - `core/lib/auth.ts` — helpers de autenticación (`signInWithPassword`,
-  `signUpWithPassword`, `signOut`) usados por `/(auth)/login` y `/(auth)/register`.
+  `signUpWithPassword`, `verifySignUpCode`, `resendSignUpCode`, `signOut`)
+  usados por `/(auth)/login` y `/(auth)/register`.
+
+### Confirmación de email al registrarse
+
+El correo de confirmación lleva un código numérico y un enlace; cualquiera
+de los dos activa la cuenta e inicia sesión. El largo del código (6 a 10
+dígitos, hoy 8) se define en cada proyecto de Supabase, no en la app:
+
+- Código: se escribe en el segundo paso de `/register` (`verifySignUpCode`).
+- Enlace: apunta a `app/auth/confirm/route.ts`, el único route handler propio.
+  Canjea el `token_hash` por una sesión en cookies y redirige a `/today`; si el
+  enlace ya no sirve, redirige a `/login?error=confirmation_link`.
+
+La plantilla del correo está en `supabase/templates/confirmation.html`
+(referenciada desde `supabase/config.toml`). En los proyectos alojados no se
+aplica sola: hay que pegarla en el dashboard (Authentication → Emails →
+Confirm signup). El enlace usa `{{ .SiteURL }}`, así que el Site URL de cada
+proyecto de Supabase debe apuntar a la URL de la app de ese entorno.
 
 ### Esquema de base de datos
 
@@ -86,11 +104,21 @@ por el middleware — redirigen a `/login` si no hay sesión.
 
 ## Testing
 
-Pruebas automatizadas con Playwright, una spec por módulo, ubicada
-dentro del propio módulo:
+Las pruebas automatizadas (Playwright, E2E) **no viven en este repo**:
+están en un proyecto independiente, hermano de esta carpeta, en
+`../Bitacora360-Automation-testing`. No agregues specs ni dependencias de
+Playwright aquí.
+
+Allá hay una spec por módulo, agrupadas igual que las rutas de `/app`:
 
 ```
-/features/habits/habits.spec.ts
-/features/finance/finance.spec.ts
-/features/watchlist/watchlist.spec.ts
+tests/auth/        -> app/(auth): login, registro, protección de rutas
+tests/dashboard/   -> app/(dashboard): today, habits, finance, watchlist
+tests/session/     -> logout
 ```
+
+Los locators de esas pruebas usan roles y textos visibles (`getByRole`,
+`getByLabel`), así que al cambiar un label, un `aria-label`, el texto de
+un botón o un título de página hay que actualizar el page object
+correspondiente en `../Bitacora360-Automation-testing/pages`. Las
+convenciones y comandos están en el `README.md` de ese proyecto.

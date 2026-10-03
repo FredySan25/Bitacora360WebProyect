@@ -10,6 +10,7 @@ const AUTH_ERROR_MESSAGES: Record<string, string> = {
   email_address_invalid: "Ese email no es válido.",
   validation_failed: "Revisa que el email y la contraseña estén bien escritos.",
   signup_disabled: "El registro de cuentas nuevas está deshabilitado.",
+  otp_expired: "El código es incorrecto o ya expiró. Revísalo o pide uno nuevo.",
   over_request_rate_limit: "Demasiados intentos. Espera un momento y vuelve a intentar.",
   over_email_send_rate_limit:
     "Se enviaron demasiados emails. Espera unos minutos y vuelve a intentar.",
@@ -35,6 +36,18 @@ export async function signInWithPassword(email: string, password: string) {
 export async function signUpWithPassword(email: string, password: string) {
   const supabase = createClient();
   return supabase.auth.signUp({ email, password });
+}
+
+/** Confirms a new account with the code from the confirmation email and starts the session. */
+export async function verifySignUpCode(email: string, code: string) {
+  const supabase = createClient();
+  return supabase.auth.verifyOtp({ email, token: code, type: "email" });
+}
+
+/** Sends the confirmation email (link + code) again. */
+export async function resendSignUpCode(email: string) {
+  const supabase = createClient();
+  return supabase.auth.resend({ type: "signup", email });
 }
 
 export async function signOut() {

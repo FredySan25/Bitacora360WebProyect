@@ -104,12 +104,17 @@ por el middleware — redirigen a `/login` si no hay sesión.
 
 ## Testing
 
-Las pruebas automatizadas (Playwright, E2E) **no viven en este repo**:
-están en un proyecto independiente, hermano de esta carpeta, en
-`../Bitacora360-Automation-testing`. No agregues specs ni dependencias de
-Playwright aquí.
+Las pruebas automatizadas **no viven en este repo**: están en dos
+proyectos independientes, hermanos de esta carpeta. No agregues specs ni
+dependencias de Playwright aquí.
 
-Allá hay una spec por módulo, agrupadas igual que las rutas de `/app`:
+- `../Bitacora360-Automation-testing` — E2E: prueba la app por el navegador.
+- `../Bitacora360-API-testing` — API: prueba Supabase directo, sin navegador
+  ni la app levantada.
+
+### E2E
+
+Hay una spec por módulo, agrupadas igual que las rutas de `/app`:
 
 ```
 tests/auth/        -> app/(auth): login, registro, protección de rutas
@@ -122,3 +127,17 @@ Los locators de esas pruebas usan roles y textos visibles (`getByRole`,
 un botón o un título de página hay que actualizar el page object
 correspondiente en `../Bitacora360-Automation-testing/pages`. Las
 convenciones y comandos están en el `README.md` de ese proyecto.
+
+### API
+
+Esas pruebas verifican el contrato que definen las migraciones de
+`supabase/migrations/`: los `grant`, las políticas RLS y las restricciones
+(`check`, llaves foráneas, índices únicos). Hay una carpeta por módulo de
+`/features` y una spec por tabla (`tests/habits/habits.spec.ts`).
+
+Al agregar o cambiar una migración hay que actualizar la spec de esa tabla
+en `../Bitacora360-API-testing/tests`, y agregar cada tabla nueva a la
+lista de `tests/auth/visitor-access.spec.ts`, que comprueba que ninguna se
+puede leer sin sesión. Un módulo nuevo con tablas lleva además su carpeta y
+su proyecto de Playwright; los pasos están en el `README.md` de ese
+proyecto.

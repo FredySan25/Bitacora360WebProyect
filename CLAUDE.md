@@ -31,6 +31,22 @@ de `/features` — solo puede importar desde `/core`.
 `/app` solo contiene rutas (páginas y layouts) y compone lo que exponen
 los módulos de `/features`; no debería contener lógica de negocio.
 
+La frontera entre módulos la hace cumplir ESLint (`no-restricted-imports`
+en `eslint.config.mjs`): un import de `features/habits` a `features/finance`,
+o de `core` a cualquier módulo, hace fallar `npm run lint`. Los módulos se
+leen de las carpetas de `/features`, así que uno nuevo queda cubierto solo.
+
+## Comandos
+
+```bash
+npm run dev          # servidor de desarrollo en http://localhost:3000
+npm run lint         # ESLint: reglas de Next.js y frontera entre módulos
+npm run typecheck    # tsc --noEmit
+npm run build        # build de producción
+```
+
+Antes de dar por terminado un cambio pasan los tres últimos.
+
 ## Convenciones de nombres
 
 - Componentes: `PascalCase` (`HabitCard.tsx`).
@@ -60,7 +76,8 @@ necesario). Cada módulo habla con Supabase a través de su propio
 - `core/lib/supabase-client.ts` — cliente para Client Components (browser).
 - `core/lib/supabase-server.ts` — cliente para Server Components / route handlers.
 - `core/lib/supabase-middleware.ts` — refresco de sesión y protección de rutas,
-  usado desde `middleware.ts` en la raíz.
+  usado desde `proxy.ts` en la raíz (el nombre que esta versión de Next.js da
+  al antiguo `middleware.ts`).
 - `core/lib/auth.ts` — helpers de autenticación (`signInWithPassword`,
   `signUpWithPassword`, `verifySignUpCode`, `resendSignUpCode`, `signOut`)
   usados por `/(auth)/login` y `/(auth)/register`.
@@ -99,8 +116,8 @@ API responde "permission denied" aunque la política exista.
 
 Configuradas en `.env.local` (excluido de git). Auth ya está conectado:
 `/login` y `/register` usan Supabase Auth (email + password) y las rutas
-de `/(dashboard)` (`/habits`, `/finance`, `/watchlist`) están protegidas
-por el middleware — redirigen a `/login` si no hay sesión.
+de `/(dashboard)` (`/today`, `/habits`, `/finance`, `/watchlist`) están
+protegidas por `proxy.ts` — redirigen a `/login` si no hay sesión.
 
 ## Testing
 

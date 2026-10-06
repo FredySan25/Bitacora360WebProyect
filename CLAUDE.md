@@ -41,7 +41,7 @@ leen de las carpetas de `/features`, así que uno nuevo queda cubierto solo.
 ```bash
 npm run dev          # servidor de desarrollo en http://localhost:3000
 npm run lint         # ESLint: reglas de Next.js y frontera entre módulos
-npm run typecheck    # tsc --noEmit
+npm run typecheck    # next typegen && tsc --noEmit: genera los tipos de rutas y revisa
 npm run build        # build de producción
 ```
 

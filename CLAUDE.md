@@ -24,7 +24,7 @@ de `/features` — solo puede importar desde `/core`.
   /watchlist/{components,hooks}
 /core
   /components   -> UI compartida entre módulos
-  /lib          -> utilidades y clientes compartidos (p. ej. cliente Supabase)
+  /lib          -> utilidades y clientes compartidos (cliente Supabase, fechas)
   /hooks        -> hooks compartidos entre módulos
 ```
 
@@ -63,8 +63,40 @@ Rutas: `/habits` (checklist diario y gestión de hábitos), `/habits/progress`
 (rachas y gráficas) y `/habits/gym` (log de entrenamientos: series/reps/peso).
 Los datos se cargan en el cliente con los hooks `useHabits` y `useWorkouts`.
 Los días se manejan como strings `YYYY-MM-DD` en la zona horaria del usuario
-(`features/habits/dates.ts`), nunca como instantes UTC. Las gráficas son
-SVG/CSS propios, sin librería de charts.
+(`core/lib/dates.ts`, compartido con finanzas), nunca como instantes UTC. Las
+gráficas son SVG/CSS propios, sin librería de charts.
+
+## Módulo de finanzas
+
+Rutas: `/finance` (movimientos del mes: tarjetas, filtros y CRUD),
+`/finance/budgets` (presupuestos por categoría con su barra de avance),
+`/finance/summary` (comparativa con el mes anterior, gastos por categoría,
+tendencia de 6 meses y regla 50/30/20) y `/finance/goals` (metas de ahorro y
+sus aportes). Los datos se cargan en el cliente con `useTransactions`,
+`useBudgets` y `useSavingsGoals`; los cálculos son funciones puras en
+`features/finance/stats.ts`.
+
+- **Mes seleccionado**: vive en la URL (`?month=YYYY-MM`, `useSelectedMonth`) y
+  se conserva entre pestañas. Sin el parámetro, o con un mes futuro, es el mes
+  actual. Como usa `useSearchParams`, el layout envuelve las pestañas y las
+  páginas en `Suspense`.
+- **Moneda y categorías**: una sola moneda (`CURRENCY`) y categorías fijas en
+  `features/finance/constants.ts`. Se guarda la clave en inglés (`food`) y la
+  migración la valida con un `check`; agregar una categoría requiere una
+  migración además del cambio en `constants.ts`.
+- **Presupuestos versionados**: cada fila de `budgets` rige desde su
+  `effective_from` (día 1 de un mes) hasta que otra fila de la misma categoría
+  la reemplaza. Editar el límite viendo un mes crea o actualiza la fila de ese
+  mes, así que los meses anteriores conservan el suyo (`activeBudgets`).
+  Eliminar un presupuesto borra todas sus versiones.
+- **Estados de la barra**: "Cerca del límite" desde el 80 % y "Excedido" al
+  pasar del 100 % (`budgetState`); el estado se muestra con ícono y texto, no
+  solo con color.
+- **Regla 50/30/20**: cada categoría de gasto es necesidad o gusto
+  (`group` en `constants.ts`); el ahorro es lo que queda del ingreso. Las metas
+  de ahorro se llevan aparte y un aporte no genera un movimiento.
+- **Eliminar** siempre pasa por `core/components/ConfirmDialog.tsx` (un
+  `<dialog>` nativo), nunca por `window.confirm`.
 
 ## Backend
 

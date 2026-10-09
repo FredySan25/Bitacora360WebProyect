@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { outlineButtonClassName } from "@/core/components/buttonStyles";
 import { FormAlert } from "@/core/components/FormAlert";
-import { addDays, startOfWeek } from "../dates";
+import { addDays, startOfWeek } from "@/core/lib/dates";
 import { useHabits } from "../hooks/useHabits";
 import { bestStreak, currentStreak, percent, rangeTotals, type Totals } from "../stats";
 import { CompletionHeatmap, type DayPoint } from "./CompletionHeatmap";

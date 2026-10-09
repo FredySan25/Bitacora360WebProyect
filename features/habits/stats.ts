@@ -1,4 +1,4 @@
-import { addDays, toDateKey, weekdayOf } from "./dates";
+import { addDays, toDateKey, weekdayOf } from "@/core/lib/dates";
 import type { DateKey, Habit } from "./types";
 
 /** Completions are kept in a Set of these keys for O(1) lookups. */

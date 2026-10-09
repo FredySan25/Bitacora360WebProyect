@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { formatDateKey } from "../dates";
+import { formatDateKey } from "@/core/lib/dates";
 import { percent, type Totals } from "../stats";
 import type { DateKey } from "../types";
 

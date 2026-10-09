@@ -5,7 +5,7 @@ import { iconButtonClassName } from "@/core/components/buttonStyles";
 import { CloseIcon, TrashIcon } from "@/core/components/icons";
 import { SubmitButton } from "@/core/components/SubmitButton";
 import { TextField } from "@/core/components/TextField";
-import { formatDateKey } from "../dates";
+import { formatDateKey } from "@/core/lib/dates";
 import { formatSet } from "../format";
 import type { Exercise, Workout, WorkoutSet, WorkoutSetInput } from "../types";
 

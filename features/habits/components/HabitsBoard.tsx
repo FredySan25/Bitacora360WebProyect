@@ -8,7 +8,7 @@ import {
 } from "@/core/components/buttonStyles";
 import { FormAlert } from "@/core/components/FormAlert";
 import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from "@/core/components/icons";
-import { addDays, formatDateKey } from "../dates";
+import { addDays, formatDateKey } from "@/core/lib/dates";
 import { useHabits } from "../hooks/useHabits";
 import { completionKey, currentStreak, isScheduledOn } from "../stats";
 import type { DateKey, Habit } from "../types";

@@ -170,6 +170,31 @@ export function TrashIcon(props: IconProps) {
   );
 }
 
+export function ArrowUpIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M12 19V5M6 11l6-6 6 6" />
+    </BaseIcon>
+  );
+}
+
+export function ArrowDownIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M12 5v14M6 13l6 6 6-6" />
+    </BaseIcon>
+  );
+}
+
+export function AlertIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M12 4.5l8.5 14.5h-17z" />
+      <path d="M12 10v4.2M12 16.6v.1" />
+    </BaseIcon>
+  );
+}
+
 export function FlameIcon(props: IconProps) {
   return (
     <BaseIcon {...props}>

@@ -5,7 +5,7 @@ import { ghostButtonClassName } from "@/core/components/buttonStyles";
 import { FormAlert } from "@/core/components/FormAlert";
 import { SubmitButton } from "@/core/components/SubmitButton";
 import { TextField } from "@/core/components/TextField";
-import { todayKey } from "../dates";
+import { todayKey } from "@/core/lib/dates";
 import { useWorkouts } from "../hooks/useWorkouts";
 import type { Workout, WorkoutInput } from "../types";
 import { ExerciseProgress } from "./ExerciseProgress";

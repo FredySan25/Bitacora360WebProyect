@@ -1,5 +1,6 @@
-/** A calendar day as a local "YYYY-MM-DD" string (see `dates.ts`). */
-export type DateKey = string;
+import type { DateKey } from "@/core/lib/dates";
+
+export type { DateKey };
 
 export type Habit = {
   id: string;

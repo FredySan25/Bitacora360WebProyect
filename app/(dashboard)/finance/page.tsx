@@ -1,5 +1,5 @@
-import { PageHeader } from "@/core/components/PageHeader";
+import { TransactionsBoard } from "@/features/finance/components/TransactionsBoard";
 
 export default function FinancePage() {
-  return <PageHeader title="Finanzas" description="Tus ingresos y gastos del mes." />;
+  return <TransactionsBoard />;
 }

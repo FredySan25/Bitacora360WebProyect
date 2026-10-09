@@ -11,7 +11,7 @@ import {
   setHabitArchived,
   updateHabit,
 } from "../api";
-import { addDays, todayKey } from "../dates";
+import { addDays, todayKey } from "@/core/lib/dates";
 import { completionKey } from "../stats";
 import type { DateKey, Habit, HabitInput, LoadStatus } from "../types";
 

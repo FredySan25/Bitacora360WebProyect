@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react";
 import { inputClassName } from "@/core/components/TextField";
-import { daysBetween, formatDateKey } from "../dates";
+import { daysBetween, formatDateKey } from "@/core/lib/dates";
 import { formatNumber, formatSet } from "../format";
 import type { DateKey, Exercise, Workout, WorkoutSet } from "../types";
 

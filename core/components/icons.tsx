@@ -195,6 +195,15 @@ export function AlertIcon(props: IconProps) {
   );
 }
 
+/** Outlined by default; pass `fill="currentColor"` for a filled star. */
+export function StarIcon(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M12 3.8l2.5 5.2 5.7.8-4.1 4 1 5.6-5.1-2.7-5.1 2.7 1-5.6-4.1-4 5.7-.8z" />
+    </BaseIcon>
+  );
+}
+
 export function FlameIcon(props: IconProps) {
   return (
     <BaseIcon {...props}>

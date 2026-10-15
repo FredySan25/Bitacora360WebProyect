@@ -1,7 +1,7 @@
 # Bitácora360
 
 App personal con tres módulos: hábitos y gym, finanzas personales y watchlist
-de películas y series. Next.js (App Router) + TypeScript + Tailwind CSS, con
+de películas, series y libros. Next.js (App Router) + TypeScript + Tailwind CSS, con
 Supabase (Postgres + Auth) como único backend.
 
 ## Preparación

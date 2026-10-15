@@ -1,7 +1,7 @@
 # Bitácora360
 
 App personal con tres módulos independientes: hábitos/gym, finanzas
-personales y watchlist de películas/series. Next.js (App Router) +
+personales y watchlist de películas, series y libros. Next.js (App Router) +
 TypeScript + Tailwind CSS, con Supabase como backend.
 
 ## Arquitectura modular
@@ -97,6 +97,24 @@ sus aportes). Los datos se cargan en el cliente con `useTransactions`,
   de ahorro se llevan aparte y un aporte no genera un movimiento.
 - **Eliminar** siempre pasa por `core/components/ConfirmDialog.tsx` (un
   `<dialog>` nativo), nunca por `window.confirm`.
+
+## Módulo de watchlist
+
+Ruta: `/watchlist`. Películas, series y libros en una sola tabla
+(`watchlist_items`, con `media_type`), cargados en el cliente con
+`useWatchlist`; las funciones puras están en `features/watchlist/items.ts`.
+
+- **Estados**: `pending` → `in_progress` → `done`, que se leen según el tipo
+  ("Por ver / Viendo / Vista", "Por leer / Leyendo / Leído", en
+  `constants.ts`). La lista se agrupa por estado y se filtra por tipo.
+- **Terminado y calificación**: como un diario de Letterboxd simplificado. Solo
+  un item terminado tiene `finished_on` (y todo terminado lo tiene) y solo él
+  puede tener `rating`, de 1 a 5 estrellas enteras; la migración lo exige con
+  dos `check`. Al cambiar de estado, `statusChange` pone la fecha de hoy o
+  borra fecha y calificación.
+- **Calificar** se hace desde la lista con `StarRating`, un grupo de radios
+  ("3 estrellas"), y "Quitar" la borra.
+- Los títulos repetidos se permiten a propósito (remakes, ediciones).
 
 ## Backend
 

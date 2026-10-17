@@ -19,6 +19,19 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=
 
 Sin esas variables la app carga, pero el inicio de sesión no funciona.
 
+La búsqueda del catálogo de la watchlist necesita dos variables más, solo de
+servidor (sin `NEXT_PUBLIC_`), también en Vercel:
+
+```bash
+TMDB_READ_ACCESS_TOKEN=   # TMDB → Settings → API → "API Read Access Token"
+GOOGLE_BOOKS_API_KEY=     # Opcional. Google Cloud, con la Books API habilitada
+```
+
+Sin el token de TMDB no se sugieren películas ni series. Sin la key de Google,
+los libros salen de Open Library. La key no puede tener restricción por sitio
+web (referer), porque la consulta sale del servidor; restríngela solo a la Books
+API. En cualquier caso, el título se puede escribir a mano.
+
 ## Comandos
 
 | Comando             | Qué hace                                             |
@@ -35,7 +48,8 @@ Sin esas variables la app carga, pero el inicio de sesión no funciona.
 ## Estructura
 
 ```
-app/         Rutas: (auth) sin sesión y (dashboard) con sesión
+app/         Rutas: (auth) sin sesión, (dashboard) con sesión, /about pública
+             y los route handlers (auth/confirm, api/watchlist/search)
 features/    Un módulo por carpeta (habits, finance, watchlist), autocontenido
 core/        Componentes, hooks y clientes de Supabase compartidos
 supabase/    Migraciones SQL, configuración de la CLI y plantillas de correo

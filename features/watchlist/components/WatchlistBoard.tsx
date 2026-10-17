@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { outlineButtonClassName } from "@/core/components/buttonStyles";
 import { ConfirmDialog } from "@/core/components/ConfirmDialog";
@@ -28,8 +29,8 @@ const SECTIONS: { status: WatchStatus; title: string }[] = [
   { status: "done", title: "Terminados" },
 ];
 
-const listClassName =
-  "divide-y divide-border rounded-2xl border border-border bg-paper-elevated shadow-[0_1px_2px_rgba(43,36,24,0.05)]";
+// As many 10rem columns as fit: two on a phone, more as the screen grows
+const gridClassName = "grid grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] gap-3 sm:gap-4";
 
 const emptyClassName =
   "rounded-2xl border border-dashed border-rule px-4 py-6 text-center text-sm text-ink-muted";
@@ -108,7 +109,7 @@ export function WatchlistBoard() {
             <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted">
               {section.title} ({groups[section.status].length})
             </h2>
-            <ul className={listClassName}>
+            <ul className={gridClassName}>
               {groups[section.status].map((item) => (
                 <WatchlistItemRow
                   key={item.id}
@@ -140,6 +141,13 @@ export function WatchlistBoard() {
             : `No tienes ${filterLabel.toLowerCase()} en tu lista.`}
         </p>
       )}
+
+      <p className="text-xs text-ink-muted">
+        Pósters y datos de TMDB, Google Books y Open Library ·{" "}
+        <Link href="/about" className="underline underline-offset-2 hover:text-ink">
+          Créditos
+        </Link>
+      </p>
 
       {deleting && (
         <ConfirmDialog

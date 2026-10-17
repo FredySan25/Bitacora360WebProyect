@@ -6,17 +6,21 @@ import { SelectField } from "@/core/components/SelectField";
 import { SubmitButton } from "@/core/components/SubmitButton";
 import { TextField } from "@/core/components/TextField";
 import type { DateKey } from "@/core/lib/dates";
+import type { CatalogLink } from "../catalog/types";
 import {
+  CATALOG_SOURCE_LABELS,
   MEDIA_TYPES,
   NOTE_MAX_LENGTH,
   TITLE_MAX_LENGTH,
   WATCH_STATUSES,
   statusLabel,
 } from "../constants";
-import { statusChange } from "../items";
+import { catalogLink, linkOf, NO_CATALOG_LINK, statusChange } from "../items";
 import type { MediaType, WatchlistItemInput, WatchStatus } from "../types";
+import { Poster } from "./Poster";
 import { SegmentedChoice } from "./SegmentedChoice";
 import { StarRating } from "./StarRating";
+import { TitleCombobox } from "./TitleCombobox";
 
 type WatchlistItemFormProps = {
   /** Current values when editing; omit to add a new item. */
@@ -31,7 +35,11 @@ type WatchlistItemFormProps = {
   onCancel: () => void;
 };
 
-/** Title, type, status and, once finished, its day, rating and review; used to add and to edit. */
+/**
+ * Title, type, status and, once finished, its day, rating and review; used to
+ * add and to edit. The title can be picked from the catalog, which brings its
+ * poster and year along.
+ */
 export function WatchlistItemForm({
   initial,
   defaultMediaType,
@@ -46,6 +54,7 @@ export function WatchlistItemForm({
   const [finishedOn, setFinishedOn] = useState(initial?.finishedOn ?? today);
   const [rating, setRating] = useState<number | null>(initial?.rating ?? null);
   const [note, setNote] = useState(initial?.note ?? "");
+  const [link, setLink] = useState<CatalogLink | null>(initial ? linkOf(initial) : null);
   const [saving, setSaving] = useState(false);
 
   const done = status === "done";
@@ -58,6 +67,7 @@ export function WatchlistItemForm({
       mediaType,
       ...statusChange({ finishedOn, rating }, status, today),
       note: note.trim() || null,
+      ...(link ?? NO_CATALOG_LINK),
     });
     setSaving(false);
   }
@@ -69,14 +79,24 @@ export function WatchlistItemForm({
           legend="Tipo"
           options={MEDIA_TYPES}
           value={mediaType}
-          onChange={setMediaType}
+          onChange={(type) => {
+            setMediaType(type);
+            // A link belongs to the catalog of one type: a movie id means nothing for a book
+            setLink(null);
+          }}
           disabled={saving}
         />
       </div>
 
       <div className="sm:col-span-2">
-        <TextField
+        <TitleCombobox
           label="Título"
+          mediaType={mediaType}
+          searchEnabled={!link}
+          onPick={(result) => {
+            setTitle(result.title);
+            setLink(catalogLink(result));
+          }}
           placeholder={mediaType === "book" ? "Cien años de soledad" : "El viaje de Chihiro"}
           required
           // At least one character that isn't a space, as the database asks
@@ -86,9 +106,34 @@ export function WatchlistItemForm({
           autoFocus
           disabled={saving}
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={setTitle}
         />
       </div>
+
+      {link && (
+        <div className="flex items-center gap-3 rounded-xl border border-border bg-paper p-2 sm:col-span-2">
+          <Poster
+            url={link.posterUrl}
+            title={title.trim() || "este título"}
+            mediaType={mediaType}
+            sizes="48px"
+            className="w-12 shrink-0 rounded-md"
+          />
+          <div className="min-w-0 flex-1 text-sm">
+            <p className="text-ink">Del catálogo de {CATALOG_SOURCE_LABELS[link.catalogSource]}</p>
+            {link.releaseYear && <p className="text-xs text-ink-muted">{link.releaseYear}</p>}
+          </div>
+          <button
+            type="button"
+            onClick={() => setLink(null)}
+            disabled={saving}
+            className={ghostButtonClassName}
+          >
+            {/* It drops the whole link (poster, year and id), not only the image */}
+            Quitar del catálogo
+          </button>
+        </div>
+      )}
 
       <SelectField
         label="Estado"

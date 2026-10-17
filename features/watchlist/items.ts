@@ -1,4 +1,5 @@
 import type { DateKey } from "@/core/lib/dates";
+import type { CatalogLink, CatalogResult } from "./catalog/types";
 import type { MediaType, WatchlistItem, WatchlistItemInput, WatchStatus } from "./types";
 
 /**
@@ -14,6 +15,35 @@ export function statusChange(
     return { status, finishedOn: item.finishedOn ?? today, rating: item.rating };
   }
   return { status, finishedOn: null, rating: null };
+}
+
+/** The catalog fields of an item typed by hand, or unlinked from its catalog. */
+export const NO_CATALOG_LINK: Record<keyof CatalogLink, null> = {
+  catalogSource: null,
+  catalogId: null,
+  posterUrl: null,
+  releaseYear: null,
+};
+
+/** What an item keeps of a picked search result. */
+export function catalogLink(result: CatalogResult): CatalogLink {
+  return {
+    catalogSource: result.source,
+    catalogId: result.catalogId,
+    posterUrl: result.posterUrl,
+    releaseYear: result.year,
+  };
+}
+
+/** The catalog link of an item, or null when it was typed by hand. */
+export function linkOf(item: Pick<WatchlistItemInput, keyof CatalogLink>): CatalogLink | null {
+  if (!item.catalogSource || !item.catalogId) return null;
+  return {
+    catalogSource: item.catalogSource,
+    catalogId: item.catalogId,
+    posterUrl: item.posterUrl,
+    releaseYear: item.releaseYear,
+  };
 }
 
 export type WatchlistGroups = Record<WatchStatus, WatchlistItem[]>;

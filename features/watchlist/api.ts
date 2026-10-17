@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import type { CatalogSource } from "./catalog/types";
 import type { MediaType, WatchlistItem, WatchlistItemInput, WatchStatus } from "./types";
 
 /*
@@ -15,10 +16,15 @@ type ItemRow = {
   rating: number | null;
   finished_on: string | null;
   note: string | null;
+  poster_url: string | null;
+  release_year: number | null;
+  catalog_source: CatalogSource | null;
+  catalog_id: string | null;
   created_at: string;
 };
 
-const ITEM_COLUMNS = "id, title, media_type, status, rating, finished_on, note, created_at";
+const ITEM_COLUMNS =
+  "id, title, media_type, status, rating, finished_on, note, created_at, poster_url, release_year, catalog_source, catalog_id";
 
 function toItem(row: ItemRow): WatchlistItem {
   return {
@@ -29,6 +35,10 @@ function toItem(row: ItemRow): WatchlistItem {
     rating: row.rating,
     finishedOn: row.finished_on,
     note: row.note,
+    posterUrl: row.poster_url,
+    releaseYear: row.release_year,
+    catalogSource: row.catalog_source,
+    catalogId: row.catalog_id,
     createdAt: row.created_at,
   };
 }
@@ -41,6 +51,10 @@ function toItemRow(input: Partial<WatchlistItemInput>) {
     rating: input.rating,
     finished_on: input.finishedOn,
     note: input.note,
+    poster_url: input.posterUrl,
+    release_year: input.releaseYear,
+    catalog_source: input.catalogSource,
+    catalog_id: input.catalogId,
   };
 }
 

@@ -34,7 +34,7 @@ export function StarRating({ label, hideLabel, value, onChange, disabled }: Star
       <legend className={hideLabel ? "sr-only" : "mb-1.5 text-sm font-medium text-ink"}>
         {label}
       </legend>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
         <div className="flex" onMouseLeave={() => setHovered(null)}>
           {STARS.map((stars) => (
             <label

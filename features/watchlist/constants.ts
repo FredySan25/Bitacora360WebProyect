@@ -1,3 +1,4 @@
+import type { CatalogSource } from "./catalog/types";
 import type { MediaType, WatchStatus } from "./types";
 
 /*
@@ -30,6 +31,29 @@ export function statusLabel(status: WatchStatus, type: MediaType): string {
   }
 }
 
+/** Books have a cover; movies and series, a poster. */
+export function posterLabel(title: string, type: MediaType): string {
+  return `${type === "book" ? "Portada" : "Póster"} de ${title}`;
+}
+
+/** Names the stand-in shown when there is no poster or it fails to load. */
+export function noPosterLabel(title: string, type: MediaType): string {
+  return `${type === "book" ? "Sin portada" : "Sin póster"}: ${title}`;
+}
+
 export const TITLE_MAX_LENGTH = 120;
 export const NOTE_MAX_LENGTH = 280;
 export const MAX_RATING = 5;
+
+export const CATALOG_SOURCE_LABELS: Record<CatalogSource, string> = {
+  tmdb: "TMDB",
+  google_books: "Google Books",
+  open_library: "Open Library",
+};
+
+/** Language the catalogs answer in: titles and posters come localized when they have them. */
+export const CATALOG_LANGUAGE = "es-MX";
+/** Characters a title needs before the catalog is searched. */
+export const SEARCH_MIN_LENGTH = 2;
+/** Most results a search returns. */
+export const SEARCH_MAX_RESULTS = 8;

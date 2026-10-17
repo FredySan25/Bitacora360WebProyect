@@ -54,6 +54,12 @@ export default async function DashboardLayout({
         </div>
         <SidebarNav items={NAV_ITEMS} />
         <div className="mt-auto border-t border-border pt-4">
+          <Link
+            href="/about"
+            className="mb-3 block px-3 text-xs text-ink-muted transition hover:text-ink"
+          >
+            Acerca de
+          </Link>
           <p className="mb-2 truncate px-3 text-xs text-ink-muted" title={user.email}>
             {user.email}
           </p>
@@ -70,6 +76,12 @@ export default async function DashboardLayout({
 
         <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-28 pt-6 md:px-10 md:pb-12 md:pt-10">
           {children}
+          {/* The sidebar has it on desktop; the bottom tabs keep their four modules */}
+          <footer className="mt-12 border-t border-border pt-4 text-center md:hidden">
+            <Link href="/about" className="text-xs text-ink-muted transition hover:text-ink">
+              Acerca de
+            </Link>
+          </footer>
         </main>
       </div>
 

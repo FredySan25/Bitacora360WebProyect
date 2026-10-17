@@ -18,6 +18,8 @@ de `/features` — solo puede importar desde `/core`.
   /(dashboard)/habits
   /(dashboard)/finance
   /(dashboard)/watchlist
+  /about                  -> créditos y atribución de TMDB (pública)
+  /api/watchlist/search   -> búsqueda del catálogo (route handler)
 /features
   /habits/{components,hooks}
   /finance/{components,hooks}
@@ -115,6 +117,27 @@ Ruta: `/watchlist`. Películas, series y libros en una sola tabla
 - **Calificar** se hace desde la lista con `StarRating`, un grupo de radios
   ("3 estrellas"), y "Quitar" la borra.
 - Los títulos repetidos se permiten a propósito (remakes, ediciones).
+- **Catálogo**: el campo de título (`TitleCombobox`) sugiere resultados de TMDB
+  (películas y series) o de Google Books, con Open Library de respaldo cuando
+  Google falla o no encuentra nada (libros). Elegir uno guarda `poster_url`,
+  `release_year`, `catalog_source` y `catalog_id`. Es opcional: un título escrito a
+  mano no tiene ninguna de las cuatro. Cambiar el tipo o "Quitar del catálogo" borra el
+  vínculo. La migración exige que el `source` y el `id` vayan juntos, que el
+  catálogo corresponda al tipo y que el póster sea https de uno de los tres hosts
+  de imágenes (los mismos de `images.remotePatterns` en `next.config.ts` y de
+  `catalog/normalize.ts`). Agregar un catálogo requiere migración.
+- **Búsqueda**: el navegador llama a `app/api/watchlist/search/route.ts`, que
+  exige sesión y delega en `features/watchlist/catalog/search.ts`. Ese código es
+  solo de servidor porque lee las keys; ningún componente de cliente lo importa.
+  El idioma de los resultados es `CATALOG_LANGUAGE` (`es-MX`) en `constants.ts`.
+- **Pósters**: `Poster` usa `next/image` con `unoptimized`, porque los catálogos
+  ya sirven el tamaño justo. Sin póster, o si la imagen falla, muestra un marcador.
+  La lista es una cuadrícula de tarjetas.
+- **Atribución**: TMDB es gratis para uso no comercial si se muestra su logo y su
+  aviso. Los dos están en `/about` (`app/about/page.tsx`, pública), enlazada desde
+  la barra lateral, el pie del dashboard en el celular y el pie de la watchlist.
+  No se quitan: si la app llegara a cobrar o a mostrar anuncios, haría falta una
+  licencia comercial de TMDB.
 
 ## Backend
 
@@ -139,7 +162,8 @@ de los dos activa la cuenta e inicia sesión. El largo del código (6 a 10
 dígitos, hoy 8) se define en cada proyecto de Supabase, no en la app:
 
 - Código: se escribe en el segundo paso de `/register` (`verifySignUpCode`).
-- Enlace: apunta a `app/auth/confirm/route.ts`, el único route handler propio.
+- Enlace: apunta a `app/auth/confirm/route.ts`, uno de los dos route handlers
+  propios (el otro es la búsqueda del catálogo de la watchlist).
   Canjea el `token_hash` por una sesión en cookies y redirige a `/today`; si el
   enlace ya no sirve, redirige a `/login?error=confirmation_link`.
 
@@ -163,6 +187,9 @@ API responde "permission denied" aunque la política exista.
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `TMDB_READ_ACCESS_TOKEN`: solo de servidor, para la búsqueda de películas y series.
+- `GOOGLE_BOOKS_API_KEY`: solo de servidor y opcional. Sin restricción de
+  referer, porque la consulta sale del servidor.
 
 Configuradas en `.env.local` (excluido de git). Auth ya está conectado:
 `/login` y `/register` usan Supabase Auth (email + password) y las rutas

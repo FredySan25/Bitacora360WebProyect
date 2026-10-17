@@ -1,4 +1,5 @@
 import type { DateKey } from "@/core/lib/dates";
+import type { CatalogSource } from "./catalog/types";
 
 export type MediaType = "movie" | "series" | "book";
 
@@ -16,6 +17,13 @@ export type WatchlistItem = {
   finishedOn: DateKey | null;
   /** A short review. */
   note: string | null;
+  /** Poster or cover from the catalog it was picked from. */
+  posterUrl: string | null;
+  releaseYear: number | null;
+  /** Catalog the item was picked from; null when it was typed by hand. */
+  catalogSource: CatalogSource | null;
+  /** Id of the item in that catalog: set exactly when `catalogSource` is. */
+  catalogId: string | null;
   createdAt: string;
 };
 
@@ -26,6 +34,10 @@ export type WatchlistItemInput = {
   rating: number | null;
   finishedOn: DateKey | null;
   note: string | null;
+  posterUrl: string | null;
+  releaseYear: number | null;
+  catalogSource: CatalogSource | null;
+  catalogId: string | null;
 };
 
 export type LoadStatus = "loading" | "ready" | "error";

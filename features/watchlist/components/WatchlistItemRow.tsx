@@ -6,6 +6,7 @@ import { PencilIcon, TrashIcon } from "@/core/components/icons";
 import { formatDateKey, type DateKey } from "@/core/lib/dates";
 import { mediaTypeLabel, statusLabel } from "../constants";
 import type { WatchlistItem, WatchlistItemInput, WatchStatus } from "../types";
+import { Poster } from "./Poster";
 import { StarRating } from "./StarRating";
 import { WatchlistItemForm } from "./WatchlistItemForm";
 
@@ -20,6 +21,9 @@ function nextSteps(item: WatchlistItem): { status: WatchStatus; label: string }[
   return [];
 }
 
+const cardClassName =
+  "rounded-2xl border border-border bg-paper-elevated shadow-[0_1px_2px_rgba(43,36,24,0.05)]";
+
 type WatchlistItemRowProps = {
   item: WatchlistItem;
   today: DateKey;
@@ -33,7 +37,7 @@ type WatchlistItemRowProps = {
   onDelete: () => void;
 };
 
-/** One item: its title, type and status, the next step, and its rating once finished. */
+/** One card of the grid: poster, title, type and status, the next step, and the rating once finished. */
 export function WatchlistItemRow({
   item,
   today,
@@ -49,7 +53,7 @@ export function WatchlistItemRow({
 
   if (editing) {
     return (
-      <li className="px-4 py-4">
+      <li className={`${cardClassName} col-span-full p-4`}>
         <WatchlistItemForm
           initial={item}
           defaultMediaType={item.mediaType}
@@ -77,33 +81,48 @@ export function WatchlistItemRow({
     : statusLabel(item.status, item.mediaType);
 
   return (
-    <li className="flex flex-col gap-2 px-4 py-3">
-      <div className="flex items-start gap-2">
-        <div className="min-w-0 flex-1">
-          <p className="truncate font-medium text-ink">{item.title}</p>
-          <p className="truncate text-xs text-ink-muted">
-            {mediaTypeLabel(item.mediaType)} · {status}
-          </p>
+    <li className={`${cardClassName} flex flex-col gap-2 p-2.5`}>
+      <div className="relative">
+        <Poster
+          url={item.posterUrl}
+          title={item.title}
+          mediaType={item.mediaType}
+          sizes="(min-width: 768px) 14rem, 50vw"
+        />
+        {/* Always visible, not on hover: phones have no hover */}
+        <div className="absolute right-1.5 top-1.5 flex gap-0.5 rounded-lg bg-paper-elevated/90 shadow-sm backdrop-blur">
+          <button
+            type="button"
+            onClick={onStartEdit}
+            aria-label={`Editar ${item.title}`}
+            className={iconButtonClassName}
+          >
+            <PencilIcon className="h-4 w-4" />
+          </button>
+          <button
+            type="button"
+            onClick={onDelete}
+            aria-label={`Eliminar ${item.title}`}
+            className={iconButtonClassName}
+          >
+            <TrashIcon className="h-4 w-4" />
+          </button>
         </div>
-        <button
-          type="button"
-          onClick={onStartEdit}
-          aria-label={`Editar ${item.title}`}
-          className={iconButtonClassName}
-        >
-          <PencilIcon className="h-4 w-4" />
-        </button>
-        <button
-          type="button"
-          onClick={onDelete}
-          aria-label={`Eliminar ${item.title}`}
-          className={iconButtonClassName}
-        >
-          <TrashIcon className="h-4 w-4" />
-        </button>
       </div>
 
-      {item.note && <p className="text-sm italic text-ink-muted">“{item.note}”</p>}
+      <div className="min-w-0 px-0.5">
+        <p className="line-clamp-2 font-medium leading-snug text-ink">{item.title}</p>
+        {item.releaseYear && (
+          <p className="text-xs tabular-nums text-ink-muted">{item.releaseYear}</p>
+        )}
+        <p className="mt-0.5 text-xs text-ink-muted">
+          {mediaTypeLabel(item.mediaType)} · {status}
+        </p>
+      </div>
+
+      {item.note && (
+        <p className="line-clamp-3 px-0.5 text-sm italic text-ink-muted">“{item.note}”</p>
+      )}
 
       {item.status === "done" ? (
         <StarRating
@@ -114,7 +133,7 @@ export function WatchlistItemRow({
           disabled={saving}
         />
       ) : (
-        <div className="-ml-3 flex flex-wrap gap-1">
+        <div className="-ml-2.5 flex flex-col items-start">
           {nextSteps(item).map((step) => (
             <button
               key={step.status}

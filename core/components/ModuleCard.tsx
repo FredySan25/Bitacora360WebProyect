@@ -12,7 +12,7 @@ type ModuleCardProps = {
 /** Summary card shell that each module uses on the Today page. */
 export function ModuleCard({ title, icon, href, children }: ModuleCardProps) {
   return (
-    <section className="flex flex-col rounded-2xl border border-border bg-paper-elevated p-5 shadow-[0_1px_2px_rgba(43,36,24,0.05)]">
+    <section className="flex flex-col rounded-2xl border border-border bg-paper-elevated p-5 shadow-[0_1px_2px_rgba(20,32,43,0.05)]">
       <header className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-accent">

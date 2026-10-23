@@ -17,7 +17,7 @@ import { BudgetProgress } from "./BudgetProgress";
 import { MonthNav } from "./MonthNav";
 
 const listClassName =
-  "divide-y divide-border rounded-2xl border border-border bg-paper-elevated shadow-[0_1px_2px_rgba(43,36,24,0.05)]";
+  "divide-y divide-border rounded-2xl border border-border bg-paper-elevated shadow-[0_1px_2px_rgba(20,32,43,0.05)]";
 
 /** Budgets in force during the selected month, each against what was spent, plus create, edit and delete. */
 export function BudgetsBoard() {

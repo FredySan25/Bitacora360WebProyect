@@ -14,9 +14,12 @@ import { completionKey, currentStreak, isScheduledOn } from "../stats";
 import type { DateKey, Habit } from "../types";
 import { HabitForm } from "./HabitForm";
 import { HabitItem } from "./HabitItem";
+import { ProgressRing } from "./ProgressRing";
 
+/** Archived habits stay as one divided list; active ones are separate cards. */
 const listClassName =
-  "divide-y divide-border rounded-2xl border border-border bg-paper-elevated shadow-[0_1px_2px_rgba(43,36,24,0.05)]";
+  "divide-y divide-border rounded-2xl border border-border bg-paper-elevated shadow-[0_1px_2px_rgba(20,32,43,0.05)]";
+const cardListClassName = "flex flex-col gap-2";
 
 function dayTitle(day: DateKey, today: DateKey): string {
   if (day === today) return "Hoy";
@@ -148,15 +151,18 @@ export function HabitsBoard() {
             onChange={(next) => setPickedDay(next === today ? null : next)}
           />
           {scheduled.length > 0 && (
-            <p className="text-sm text-ink-muted">
-              <span className="text-base font-semibold text-ink">{doneCount}</span> de{" "}
-              {scheduled.length}
-            </p>
+            <div className="flex items-center gap-3">
+              <p className="text-sm text-ink-muted">
+                <span className="text-base font-semibold text-ink">{doneCount}</span> de{" "}
+                {scheduled.length}
+              </p>
+              <ProgressRing done={doneCount} total={scheduled.length} />
+            </div>
           )}
         </div>
 
         {scheduled.length > 0 ? (
-          <ul className={listClassName}>{scheduled.map((habit) => renderItem(habit, true))}</ul>
+          <ul className={cardListClassName}>{scheduled.map((habit) => renderItem(habit, true))}</ul>
         ) : (
           <p className="rounded-2xl border border-dashed border-rule px-4 py-6 text-center text-sm text-ink-muted">
             {habits.length === 0
@@ -171,7 +177,7 @@ export function HabitsBoard() {
           <h2 className="mb-2 text-xs font-semibold uppercase tracking-widest text-ink-muted">
             Otros días
           </h2>
-          <ul className={listClassName}>{unscheduled.map((habit) => renderItem(habit, false))}</ul>
+          <ul className={cardListClassName}>{unscheduled.map((habit) => renderItem(habit, false))}</ul>
         </section>
       )}
 

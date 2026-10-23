@@ -22,7 +22,7 @@ function nextSteps(item: WatchlistItem): { status: WatchStatus; label: string }[
 }
 
 const cardClassName =
-  "rounded-2xl border border-border bg-paper-elevated shadow-[0_1px_2px_rgba(43,36,24,0.05)]";
+  "rounded-2xl border border-border bg-paper-elevated shadow-[0_1px_2px_rgba(20,32,43,0.05)]";
 
 type WatchlistItemRowProps = {
   item: WatchlistItem;

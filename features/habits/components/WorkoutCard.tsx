@@ -53,7 +53,7 @@ export function WorkoutCard({ workout, exercises, onAddSet, onDeleteSet, onDelet
   }
 
   return (
-    <li className="rounded-2xl border border-border bg-paper-elevated p-5 shadow-[0_1px_2px_rgba(43,36,24,0.05)]">
+    <li className="rounded-2xl border border-border bg-paper-elevated p-5 shadow-[0_1px_2px_rgba(20,32,43,0.05)]">
       <header className="mb-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="truncate font-display text-lg font-semibold text-ink first-letter:uppercase">

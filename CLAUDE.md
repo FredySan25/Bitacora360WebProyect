@@ -80,10 +80,12 @@ explícitamente.
 - **Accesibilidad**: un estado se comunica con ícono y texto, no solo con color;
   todo control conserva el foco visible de `globals.css`.
 - **Skill `frontend-design`**: está habilitado para este proyecto. Sus criterios
-  (jerarquía, textos claros, movimiento con moderación) se aplican dentro de
-  este sistema; su búsqueda de una identidad visual nueva solo aplica a un
-  rediseño pedido explícitamente. Un cambio de textos visibles sigue el flujo
-  normal y obliga a actualizar los page objects de E2E.
+  (jerarquía, espaciado, movimiento con moderación) se aplican dentro de este
+  sistema; su búsqueda de una identidad visual nueva solo aplica a un
+  rediseño pedido explícitamente. Puede cambiar clases de Tailwind, layout,
+  espaciado y animaciones, pero no los textos visibles (su consejo de
+  redacción no aplica al pulido visual) ni lo que lista la sección E2E de
+  Testing.
 
 ## Módulo de hábitos
 
@@ -242,11 +244,35 @@ tests/dashboard/   -> app/(dashboard): today, habits, finance, watchlist
 tests/session/     -> logout
 ```
 
-Los locators de esas pruebas usan roles y textos visibles (`getByRole`,
-`getByLabel`), así que al cambiar un label, un `aria-label`, el texto de
-un botón o un título de página hay que actualizar el page object
-correspondiente en `../Bitacora360-Automation-testing/pages`. Las
-convenciones y comandos están en el `README.md` de ese proyecto.
+Los page objects de `../Bitacora360-Automation-testing/pages` ubican la
+interfaz por roles, textos y estructura HTML. Estas cosas no se cambian
+salvo que se pida, venga el cambio de donde venga:
+
+- Textos visibles, `label`, `aria-label` y el `alt` de las imágenes. Viven en
+  `support/locales/es.ts` del proyecto E2E; si un cambio pedido los toca, se
+  actualizan ahí.
+- Roles y elementos nativos: `form`, `section`, `details/summary`,
+  `figcaption`, `dialog`, `button[type="submit"]`, el `label` que envuelve
+  cada estrella de la watchlist, `optgroup`, y los headings con su nivel.
+  También `aside` (la barra lateral), `nav` con su `aria-label`,
+  `fieldset/legend` (los grupos se ubican por su leyenda), `select` nativo,
+  `ul/li` en las listas, `dl/dt/dd` en las tarjetas de `/today`, `table` con
+  `th scope="row"`, los `role` explícitos (`group`, `img`, `progressbar`,
+  `status`, `alert`) y los `<p>` que se ubican como párrafo: el mes del
+  selector de finanzas y las etiquetas de las cifras de `/habits/progress`.
+- Orden y cantidad: en `/habits`, `/login` y cada paso de `/register` hay un
+  solo `<form>`, y en `/habits` un solo `<details>`; las tarjetas de resumen
+  de finanzas son un `group` con sus párrafos en este orden: etiqueta, monto
+  y, si la vista lo muestra, detalle; el `dialog` de confirmación tiene un
+  solo heading y un solo párrafo; en la tarjeta de watchlist de `/today`, la
+  línea "y N más" es un `li` más de la lista; las columnas de la tabla de
+  progreso de hábitos y el orden de las filas de las listas se mantienen.
+
+Si un cambio pedido rompe algo de esta lista, se actualiza el page object en
+el mismo cambio. Después de tocar una pantalla se corre su spec desde ese
+proyecto (por ejemplo `npx playwright test tests/dashboard/habits.spec.ts`)
+y se informa el resultado. Las convenciones y comandos están en el
+`README.md` de ese proyecto.
 
 ### API
 

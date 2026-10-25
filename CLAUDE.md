@@ -59,6 +59,32 @@ Antes de dar por terminado un cambio pasan los tres últimos.
   (`features/habits/api.ts`), que encapsula las queries a Supabase para
   ese módulo. Ningún otro módulo debe importar el `api.ts` de otro.
 
+## Sistema de diseño
+
+La dirección visual ya está fijada y toda pantalla nueva la sigue. No se
+cambian paleta, tipografía, radios ni sombras salvo que se pida un rediseño
+explícitamente.
+
+- **Tokens**: la paleta "clean board" (neutros fríos y acento teal, con modo
+  oscuro) vive en `app/globals.css` y se expone a Tailwind con `@theme`. Los
+  colores se usan solo por token (`bg-paper`, `bg-paper-elevated`, `text-ink`,
+  `text-ink-muted`, `text-accent`, `border-border`, `text-positive`,
+  `text-warning`, `text-danger`, `series-income`/`series-expense`), nunca con hex
+  sueltos ni la paleta por defecto de Tailwind (`gray-*`, `teal-*`…).
+- **Tipografía**: Geist y Geist Mono, cargadas en `app/layout.tsx`.
+- **Superficies**: las tarjetas usan `rounded-2xl`, `bg-paper-elevated` y
+  `shadow-card`; los fondos de bitácora, `.bg-notebook-lines`.
+- **Componentes**: antes de crear estilos se reutiliza lo de `core/components/`
+  (`PageHeader`, `ModuleCard`, `TextField`, `SelectField`, `SubmitButton`,
+  `FormAlert`, `ConfirmDialog`, `icons.tsx` y las clases de `buttonStyles.ts`).
+- **Accesibilidad**: un estado se comunica con ícono y texto, no solo con color;
+  todo control conserva el foco visible de `globals.css`.
+- **Skill `frontend-design`**: está habilitado para este proyecto. Sus criterios
+  (jerarquía, textos claros, movimiento con moderación) se aplican dentro de
+  este sistema; su búsqueda de una identidad visual nueva solo aplica a un
+  rediseño pedido explícitamente. Un cambio de textos visibles sigue el flujo
+  normal y obliga a actualizar los page objects de E2E.
+
 ## Módulo de hábitos
 
 Rutas: `/habits` (checklist diario y gestión de hábitos), `/habits/progress`

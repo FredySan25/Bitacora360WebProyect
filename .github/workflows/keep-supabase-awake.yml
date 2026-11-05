@@ -1,0 +1,45 @@
+name: Keep Supabase awake
+
+# Supabase pauses a free-plan project after 7 days without activity, and a
+# paused project leaves the app unable to sign in. Twice a week this workflow
+# sends one query to the database of each project, so neither gets there. If a
+# project does not answer, the run fails and GitHub emails the repository owner
+on:
+  schedule:
+    # Mondays and Thursdays at 12:00 UTC: never more than 4 days apart
+    - cron: "0 12 * * 1,4"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    name: Query ${{ matrix.project }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - project: production
+            url-secret: PROD_SUPABASE_URL
+            key-secret: PROD_SUPABASE_PUBLISHABLE_KEY
+          - project: test
+            url-secret: TEST_SUPABASE_URL
+            key-secret: TEST_SUPABASE_PUBLISHABLE_KEY
+    env:
+      SUPABASE_URL: ${{ secrets[matrix.url-secret] }}
+      SUPABASE_KEY: ${{ secrets[matrix.key-secret] }}
+    steps:
+      # The tables are granted to signed-in users only, so without a session
+      # Postgres itself answers "permission denied" (42501). That answer proves
+      # the query reached the database, which is the activity Supabase counts.
+      # A paused or unreachable project answers anything else
+      - name: Send a query to the database
+        shell: bash
+        run: |
+          body=$(curl -sS --retry 3 --max-time 30 \
+            "$SUPABASE_URL/rest/v1/habits?select=id&limit=1" \
+            -H "apikey: $SUPABASE_KEY") || true
+          echo "$body"
+          if ! grep -q '"code":"42501"' <<<"$body"; then
+            echo "::error::The ${{ matrix.project }} project did not answer from its database: it may be paused"
+            exit 1
+          fi

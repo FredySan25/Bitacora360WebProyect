@@ -4,6 +4,11 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { outlineButtonClassName } from "@/core/components/buttonStyles";
 import { FormAlert } from "@/core/components/FormAlert";
+import {
+  figureRowClassName,
+  sectionHeadingClassName,
+  sheetClassName,
+} from "@/core/components/surfaces";
 import { addDays, startOfWeek } from "@/core/lib/dates";
 import { useHabits } from "../hooks/useHabits";
 import { bestStreak, currentStreak, percent, rangeTotals, type Totals } from "../stats";
@@ -25,8 +30,8 @@ function formatDays(count: number): string {
 
 function ChartCard({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="rounded-2xl border border-border bg-paper-elevated p-5">
-      <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-ink-muted">
+    <section className={`${sheetClassName} p-5 md:p-6`}>
+      <h2 className={`mb-4 ${sectionHeadingClassName} md:text-[1.3125rem]`}>
         {title}
       </h2>
       {children}
@@ -39,7 +44,7 @@ export function HabitsProgress() {
   const { status, habits, completions, today, since } = useHabits();
 
   if (status === "loading") {
-    return <p className="text-sm text-ink-muted">Cargando tu progreso...</p>;
+    return <p className="text-ink-muted">Cargando tu progreso...</p>;
   }
   if (status === "error") {
     return (
@@ -49,7 +54,7 @@ export function HabitsProgress() {
   if (habits.length === 0) {
     return (
       <div className="flex flex-col items-start gap-4">
-        <p className="font-display text-lg text-ink">
+        <p className="font-display text-xl text-ink">
           Cuando registres hábitos, aquí verás tus rachas y tu avance.
         </p>
         <Link href="/habits" className={outlineButtonClassName}>
@@ -86,8 +91,8 @@ export function HabitsProgress() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+    <div className="flex flex-col gap-8">
+      <div className={figureRowClassName}>
         <StatTile
           label="Hoy"
           value={
@@ -122,46 +127,46 @@ export function HabitsProgress() {
 
       <ChartCard title="Por hábito">
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[26rem] text-left text-sm">
+          <table className="w-full min-w-[26rem] text-left text-[0.9375rem]">
             <thead>
-              <tr className="border-b border-border text-xs text-ink-muted">
-                <th scope="col" className="pb-2 pr-3 font-medium">
+              <tr className="border-b border-rule text-sm text-ink-muted">
+                <th scope="col" className="pb-2.5 pr-3 font-bold">
                   Hábito
                 </th>
-                <th scope="col" className="pb-2 pr-3 text-right font-medium">
+                <th scope="col" className="pb-2.5 pr-3 text-right font-bold">
                   Racha actual
                 </th>
-                <th scope="col" className="pb-2 pr-3 text-right font-medium">
+                <th scope="col" className="pb-2.5 pr-3 text-right font-bold">
                   Mejor racha
                 </th>
-                <th scope="col" className="pb-2 font-medium">
+                <th scope="col" className="pb-2.5 font-bold">
                   Últimos 30 días
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-border">
+            <tbody className="divide-y divide-rule">
               {perHabit.map(({ habit, current, best, last30 }) => {
                 const rate = percent(last30);
                 return (
                   <tr key={habit.id}>
-                    <th scope="row" className="max-w-40 truncate py-2.5 pr-3 font-medium text-ink">
+                    <th scope="row" className="max-w-48 truncate py-3 pr-3 font-bold text-ink">
                       {habit.name}
                     </th>
-                    <td className="py-2.5 pr-3 text-right tabular-nums text-ink">
+                    <td className="py-3 pr-3 text-right tabular-nums text-ink">
                       {formatDays(current)}
                     </td>
-                    <td className="py-2.5 pr-3 text-right tabular-nums text-ink-muted">
+                    <td className="py-3 pr-3 text-right tabular-nums text-ink-muted">
                       {formatDays(best)}
                     </td>
-                    <td className="py-2.5">
-                      <div className="flex items-center gap-2">
-                        <div className="h-1.5 w-24 overflow-hidden rounded-full bg-accent/20">
+                    <td className="py-3">
+                      <div className="flex items-center gap-3">
+                        <div className="h-2.5 w-32 overflow-hidden rounded-sm bg-rule">
                           <div
-                            className="h-full rounded-full bg-accent"
+                            className="h-full bg-accent"
                             style={{ width: `${rate ?? 0}%` }}
                           />
                         </div>
-                        <span className="w-9 text-right text-xs tabular-nums text-ink-muted">
+                        <span className="w-11 text-right text-sm tabular-nums text-ink">
                           {rate === null ? "—" : `${rate}%`}
                         </span>
                       </div>

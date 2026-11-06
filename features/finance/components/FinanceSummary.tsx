@@ -25,7 +25,7 @@ export function FinanceSummary() {
   const { status, transactions, loadedMonth, refreshing } = useTransactions(month, TREND_MONTHS);
 
   if (status === "loading") {
-    return <p className="text-sm text-ink-muted">Cargando tu resumen...</p>;
+    return <p className="text-ink-muted">Cargando tu resumen...</p>;
   }
   if (status === "error") {
     return (
@@ -39,12 +39,12 @@ export function FinanceSummary() {
   const trend = monthlyTrend(transactions, loadedMonth, TREND_MONTHS);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <MonthNav month={month} thisMonth={thisMonth} onChange={setMonth} />
 
       <div
         aria-busy={refreshing}
-        className={`flex flex-col gap-4 transition-opacity ${refreshing ? "opacity-60" : ""}`}
+        className={`flex flex-col gap-8 transition-opacity ${refreshing ? "opacity-60" : ""}`}
       >
         <SummaryCards
           totals={totalsOf(monthTransactions)}
@@ -59,7 +59,7 @@ export function FinanceSummary() {
           {byCategory.length > 0 ? (
             <CategoryChart rows={byCategory} />
           ) : (
-            <p className="text-sm text-ink-muted">Sin gastos en {formatMonth(loadedMonth)}.</p>
+            <p className="text-ink-muted">Sin gastos en {formatMonth(loadedMonth)}.</p>
           )}
         </ChartCard>
 
@@ -67,7 +67,7 @@ export function FinanceSummary() {
           {transactions.length > 0 ? (
             <TrendChart points={trend} />
           ) : (
-            <p className="text-sm text-ink-muted">Aún no hay movimientos en estos meses.</p>
+            <p className="text-ink-muted">Aún no hay movimientos en estos meses.</p>
           )}
         </ChartCard>
 

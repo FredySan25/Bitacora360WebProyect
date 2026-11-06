@@ -5,6 +5,7 @@ import { iconButtonClassName } from "@/core/components/buttonStyles";
 import { CloseIcon, TrashIcon } from "@/core/components/icons";
 import { SubmitButton } from "@/core/components/SubmitButton";
 import { TextField } from "@/core/components/TextField";
+import { itemHeadingClassName, sheetClassName } from "@/core/components/surfaces";
 import { formatDateKey } from "@/core/lib/dates";
 import { formatSet } from "../format";
 import type { Exercise, Workout, WorkoutSet, WorkoutSetInput } from "../types";
@@ -53,13 +54,13 @@ export function WorkoutCard({ workout, exercises, onAddSet, onDeleteSet, onDelet
   }
 
   return (
-    <li className="rounded-2xl border border-border bg-paper-elevated p-5 shadow-[0_1px_2px_rgba(20,32,43,0.05)]">
+    <li className={`${sheetClassName} p-5 md:p-6`}>
       <header className="mb-4 flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h3 className="truncate font-display text-lg font-semibold text-ink first-letter:uppercase">
+          <h3 className={`truncate first-letter:uppercase ${itemHeadingClassName}`}>
             {workout.title ?? "Entrenamiento"}
           </h3>
-          <p className="text-xs text-ink-muted first-letter:uppercase">
+          <p className="text-sm text-ink-muted first-letter:uppercase">
             {formatDateKey(workout.performedOn, {
               weekday: "long",
               day: "numeric",
@@ -79,26 +80,26 @@ export function WorkoutCard({ workout, exercises, onAddSet, onDeleteSet, onDelet
       </header>
 
       {groups.length === 0 ? (
-        <p className="mb-4 text-sm text-ink-muted">Aún no hay series. Registra la primera.</p>
+        <p className="mb-4 text-ink-muted">Aún no hay series. Registra la primera.</p>
       ) : (
-        <div className="mb-5 flex flex-col gap-3">
+        <div className="mb-5 flex flex-col gap-3.5">
           {groups.map((group) => (
             <div key={group.exerciseId}>
-              <h4 className="mb-1.5 text-sm font-medium text-ink">
+              <h4 className="mb-1.5 font-bold text-ink">
                 {exerciseNames.get(group.exerciseId) ?? "Ejercicio"}
               </h4>
               <ul className="flex flex-wrap gap-1.5">
                 {group.sets.map((set) => (
                   <li
                     key={set.id}
-                    className="flex items-center rounded-lg border border-border bg-paper pl-2.5 text-sm tabular-nums text-ink"
+                    className="flex items-center rounded-md border border-border bg-paper pl-2.5 font-mono text-sm tabular-nums text-ink"
                   >
                     {formatSet(set)}
                     <button
                       type="button"
                       onClick={() => onDeleteSet(set.id)}
                       aria-label={`Eliminar serie ${formatSet(set)}`}
-                      className="ml-0.5 flex h-7 w-7 items-center justify-center rounded-md text-ink-muted transition hover:text-ink"
+                      className="ml-0.5 flex h-8 w-8 items-center justify-center rounded-md text-ink-muted transition hover:text-ink"
                     >
                       <CloseIcon className="h-3.5 w-3.5" />
                     </button>
@@ -112,7 +113,7 @@ export function WorkoutCard({ workout, exercises, onAddSet, onDeleteSet, onDelet
 
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-2 items-end gap-3 border-t border-border pt-4 sm:grid-cols-[minmax(0,1fr)_5.5rem_6.5rem_auto]"
+        className="grid grid-cols-2 items-end gap-3 border-t border-rule pt-4 sm:grid-cols-[minmax(0,1fr)_6rem_7rem_auto]"
       >
         <div className="col-span-2 sm:col-span-1">
           <TextField

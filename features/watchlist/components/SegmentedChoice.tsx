@@ -1,6 +1,12 @@
 "use client";
 
 import { useId } from "react";
+import {
+  segmentClassName,
+  segmentGroupClassName,
+  tabClassName,
+  tabRowClassName,
+} from "@/core/components/surfaces";
 
 type SegmentedChoiceProps<T extends string> = {
   /** Names the group; shown above the pills unless `hideLegend`. */
@@ -10,9 +16,11 @@ type SegmentedChoiceProps<T extends string> = {
   value: T;
   onChange: (value: T) => void;
   disabled?: boolean;
+  /** "tabs" for a filter over a whole screen, so it reads like the section tabs. */
+  look?: "segments" | "tabs";
 };
 
-/** A row of pills that behaves as a radio group: one option is always picked. */
+/** A row of options that behaves as a radio group: one option is always picked. */
 export function SegmentedChoice<T extends string>({
   legend,
   hideLegend,
@@ -20,25 +28,23 @@ export function SegmentedChoice<T extends string>({
   value,
   onChange,
   disabled,
+  look = "segments",
 }: SegmentedChoiceProps<T>) {
   const name = useId();
+  const optionClassName = look === "tabs" ? tabClassName : segmentClassName;
 
   return (
     <fieldset disabled={disabled}>
-      <legend className={hideLegend ? "sr-only" : "mb-1.5 text-sm font-medium text-ink"}>
+      <legend className={hideLegend ? "sr-only" : "mb-1.5 text-sm font-bold text-ink"}>
         {legend}
       </legend>
-      <div className="inline-flex max-w-full gap-1 overflow-x-auto rounded-xl border border-border bg-paper p-1">
+      <div className={look === "tabs" ? tabRowClassName : segmentGroupClassName}>
         {options.map((option) => (
           <label
             key={option.value}
-            className={`relative shrink-0 rounded-lg px-3.5 py-1.5 text-sm font-medium transition has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-accent ${
-              value === option.value
-                ? "bg-accent/10 text-accent"
-                : "text-ink-muted hover:bg-ink/5 hover:text-ink"
-            }`}
+            className={optionClassName(value === option.value)}
           >
-            {/* Covers the whole pill, so a click anywhere on it lands on the radio */}
+            {/* Covers the whole option, so a click anywhere on it lands on the radio */}
             <input
               type="radio"
               name={name}

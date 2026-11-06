@@ -9,13 +9,13 @@ export const metadata: Metadata = {
 };
 
 const linkClassName =
-  "font-medium text-accent underline underline-offset-2 hover:text-accent-hover";
+  "font-bold text-accent underline underline-offset-[3px] hover:text-accent-hover";
 
 function Block({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section className="flex flex-col gap-3 rounded-2xl border border-border bg-paper-elevated p-5">
-      <h2 className="font-display text-xl font-semibold text-ink">{title}</h2>
-      {children}
+    <section className="grid gap-x-10 gap-y-3 border-t border-rule pt-7 md:grid-cols-[13rem_minmax(0,1fr)]">
+      <h2 className="font-display text-[1.625rem] leading-tight font-bold text-ink">{title}</h2>
+      <div className="flex max-w-[62ch] flex-col gap-3">{children}</div>
     </section>
   );
 }
@@ -27,14 +27,14 @@ function Block({ title, children }: { title: string; children: ReactNode }) {
  */
 export default function AboutPage() {
   return (
-    <main className="mx-auto w-full max-w-2xl px-4 py-10 md:py-16">
-      <Link href="/" className="mb-6 inline-block text-sm text-ink-muted hover:text-ink">
+    <main className="bg-margin-rule mx-auto w-full max-w-5xl px-4 py-10 md:py-14 md:pr-12 md:pl-24">
+      <Link href="/" className="mb-8 inline-block text-[0.9375rem] text-ink-muted hover:text-ink">
         ← Volver a Bitácora360
       </Link>
 
       <PageHeader title="Acerca de Bitácora360" />
 
-      <div className="flex flex-col gap-5 text-sm leading-relaxed text-ink">
+      <div className="flex flex-col gap-8 text-[1.0625rem] leading-relaxed text-ink">
         <Block title="Qué es">
           <p>
             Bitácora360 es un proyecto personal, sin fines comerciales: no se vende, no tiene
@@ -94,7 +94,7 @@ export default function AboutPage() {
           </p>
         </Block>
 
-        <p className="text-xs text-ink-muted">
+        <p className="border-t border-rule pt-5 text-sm text-ink-muted">
           Los pósters, las portadas y los datos de cada catálogo pertenecen a sus dueños.
         </p>
       </div>

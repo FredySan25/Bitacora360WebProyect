@@ -5,6 +5,7 @@ import { outlineButtonClassName } from "@/core/components/buttonStyles";
 import { ConfirmDialog } from "@/core/components/ConfirmDialog";
 import { FormAlert } from "@/core/components/FormAlert";
 import { PlusIcon } from "@/core/components/icons";
+import { emptyStateClassName, sheetClassName } from "@/core/components/surfaces";
 import { todayKey } from "@/core/lib/dates";
 import { formatMoney } from "../format";
 import { useSavingsGoals } from "../hooks/useSavingsGoals";
@@ -39,7 +40,7 @@ export function GoalsBoard() {
   const [deleting, setDeleting] = useState<PendingDelete | null>(null);
 
   if (status === "loading") {
-    return <p className="text-sm text-ink-muted">Cargando tus metas...</p>;
+    return <p className="text-ink-muted">Cargando tus metas...</p>;
   }
   if (status === "error") {
     return (
@@ -48,11 +49,11 @@ export function GoalsBoard() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       {actionError && <FormAlert message={actionError} />}
 
       {goals.length > 0 ? (
-        <ul className="flex flex-col gap-4">
+        <ul className="grid gap-6 lg:grid-cols-2 lg:items-start">
           {goals.map((goal) => (
             <GoalCard
               key={goal.id}
@@ -76,14 +77,14 @@ export function GoalsBoard() {
           ))}
         </ul>
       ) : (
-        <p className="rounded-2xl border border-dashed border-rule px-4 py-6 text-center text-sm text-ink-muted">
+        <p className={emptyStateClassName}>
           Aún no tienes metas de ahorro. Un fondo de emergencia es un buen comienzo.
         </p>
       )}
 
       {creating ? (
-        <section className="rounded-2xl border border-border bg-paper-elevated p-4">
-          <h2 className="mb-3 font-display text-lg font-semibold text-ink">Nueva meta</h2>
+        <section className={`${sheetClassName} p-5 md:p-6`}>
+          <h2 className="mb-4 font-display text-[1.3125rem] font-bold text-ink">Nueva meta</h2>
           <GoalForm
             submitLabel="Crear meta"
             onSubmit={async (input) => {

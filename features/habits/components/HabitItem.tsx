@@ -37,7 +37,7 @@ export function HabitItem({
 }: HabitItemProps) {
   if (editing) {
     return (
-      <li className="rounded-xl border border-border bg-paper-elevated px-4 py-4">
+      <li className="py-5">
         <HabitForm
           initial={{ name: habit.name, weekdays: habit.weekdays }}
           submitLabel="Guardar"
@@ -56,19 +56,21 @@ export function HabitItem({
   }
 
   return (
-    <li className="flex items-center gap-3 rounded-xl border border-border bg-paper-elevated px-4 py-3">
+    <li className="flex items-center gap-3.5 py-3.5">
       {checked !== undefined && (
         <HabitCheckbox checked={checked} label={habit.name} onToggle={onToggle} />
       )}
 
       <div className="min-w-0 flex-1">
-        <p className={`truncate font-medium ${checked ? "text-ink-muted line-through" : "text-ink"}`}>
+        <p
+          className={`truncate text-[1.0625rem] ${checked ? "text-ink-muted line-through" : "text-ink"}`}
+        >
           {habit.name}
         </p>
-        <p className="flex flex-wrap items-center gap-x-2 text-xs text-ink-muted">
+        <p className="mt-0.5 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-sm text-ink-muted">
           <span>{describeWeekdays(habit.weekdays)}</span>
           {streak > 0 && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-accent/10 px-2 py-0.5 font-medium text-accent">
+            <span className="inline-flex items-center gap-1 rounded px-2 py-px text-[0.8125rem] font-bold text-ink bg-highlight">
               <FlameIcon className="h-3.5 w-3.5" />
               Racha de {streak} {streak === 1 ? "día" : "días"}
             </span>

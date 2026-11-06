@@ -53,7 +53,7 @@ export function HabitForm({ initial, submitLabel, onSubmit, onCancel, children }
       />
 
       <fieldset className="flex flex-col gap-1.5" disabled={saving}>
-        <legend className="mb-1.5 text-sm font-medium text-ink">Días</legend>
+        <legend className="mb-1.5 text-sm font-bold text-ink">Días</legend>
         <div className="flex flex-wrap gap-1.5">
           {WEEKDAYS.map((day) => {
             const selected = weekdays.includes(day.value);
@@ -64,10 +64,10 @@ export function HabitForm({ initial, submitLabel, onSubmit, onCancel, children }
                 aria-pressed={selected}
                 aria-label={day.name}
                 onClick={() => toggleWeekday(day.value)}
-                className={`h-9 w-9 rounded-full border text-xs font-semibold transition ${
+                className={`h-11 w-11 rounded-lg border-[1.5px] text-sm font-bold transition ${
                   selected
-                    ? "border-accent bg-accent text-accent-foreground"
-                    : "border-border bg-paper text-ink-muted hover:border-accent"
+                    ? "border-ink bg-ink text-paper"
+                    : "border-ink-muted text-ink hover:border-ink"
                 }`}
               >
                 {day.short}
@@ -76,7 +76,7 @@ export function HabitForm({ initial, submitLabel, onSubmit, onCancel, children }
           })}
         </div>
         {weekdays.length === 0 && (
-          <p role="alert" className="text-xs text-accent">
+          <p role="alert" className="text-sm text-danger">
             Elige al menos un día.
           </p>
         )}

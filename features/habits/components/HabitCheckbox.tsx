@@ -7,7 +7,7 @@ type HabitCheckboxProps = {
   onToggle: () => void;
 };
 
-/** Rounded-square check toggle for marking a habit as done. */
+/** Square check toggle for marking a habit as done; inked in when done. */
 export function HabitCheckbox({ checked, label, onToggle }: HabitCheckboxProps) {
   return (
     <button
@@ -16,10 +16,10 @@ export function HabitCheckbox({ checked, label, onToggle }: HabitCheckboxProps) 
       aria-checked={checked}
       aria-label={label}
       onClick={onToggle}
-      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border transition active:scale-95 ${
+      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-[5px] border-[1.5px] transition active:scale-95 motion-reduce:active:scale-100 ${
         checked
-          ? "border-accent bg-accent text-accent-foreground"
-          : "border-ink-muted/60 bg-paper-elevated text-transparent hover:border-accent"
+          ? "border-ink bg-ink text-paper"
+          : "border-ink-muted bg-transparent text-transparent hover:border-ink"
       }`}
     >
       <CheckIcon className="h-4 w-4" strokeWidth={2.4} />

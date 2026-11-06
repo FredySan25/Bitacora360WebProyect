@@ -1,7 +1,6 @@
 "use client";
 
 import { ModuleCard, ModuleCardEmpty } from "@/core/components/ModuleCard";
-import { HabitsIcon } from "@/core/components/icons";
 import { useHabits } from "../hooks/useHabits";
 import { completionKey, isScheduledOn } from "../stats";
 import { HabitCheckbox } from "./HabitCheckbox";
@@ -18,12 +17,10 @@ export function HabitsTodayCard() {
   const doneCount = scheduled.filter((habit) => isDone(habit.id)).length;
 
   return (
-    <ModuleCard title="Hábitos" icon={<HabitsIcon />} href="/habits">
-      {status === "loading" && <p className="text-sm text-ink-muted">Cargando...</p>}
+    <ModuleCard title="Hábitos" href="/habits" framed>
+      {status === "loading" && <p className="text-ink-muted">Cargando...</p>}
 
-      {status === "error" && (
-        <p className="text-sm text-ink-muted">No pudimos cargar tus hábitos.</p>
-      )}
+      {status === "error" && <p className="text-ink-muted">No pudimos cargar tus hábitos.</p>}
 
       {status === "ready" && habits.length === 0 && (
         <ModuleCardEmpty
@@ -34,35 +31,43 @@ export function HabitsTodayCard() {
       )}
 
       {status === "ready" && habits.length > 0 && scheduled.length === 0 && (
-        <p className="font-display text-lg leading-snug text-ink">
+        <p className="font-display text-xl leading-snug text-ink">
           Hoy no toca ningún hábito. Día libre.
         </p>
       )}
 
       {status === "ready" && scheduled.length > 0 && (
         <div className="flex flex-col gap-4">
-          <div>
-            <p className="text-2xl font-semibold text-ink">
-              {doneCount} de {scheduled.length}
+          <div className="flex flex-col gap-3">
+            <p className="text-lg text-ink-muted tabular-nums">
+              <span className="font-display text-5xl leading-none font-bold text-ink">
+                {doneCount}
+              </span>{" "}
+              de {scheduled.length}
             </p>
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-accent/20">
-              <div
-                className="h-full rounded-full bg-accent transition-[width]"
-                style={{ width: `${(doneCount / scheduled.length) * 100}%` }}
-              />
+            {/* One segment per habit; the count above carries the meaning */}
+            <div aria-hidden="true" className="flex gap-1">
+              {scheduled.map((habit) => (
+                <span
+                  key={habit.id}
+                  className={`h-2 flex-1 rounded-sm transition-colors ${
+                    isDone(habit.id) ? "bg-accent" : "bg-rule"
+                  }`}
+                />
+              ))}
             </div>
           </div>
 
-          <ul className="flex flex-col gap-2">
+          <ul className="divide-y divide-rule">
             {scheduled.slice(0, MAX_LISTED).map((habit) => (
-              <li key={habit.id} className="flex items-center gap-2.5">
+              <li key={habit.id} className="flex items-center gap-3.5 py-2.5">
                 <HabitCheckbox
                   checked={isDone(habit.id)}
                   label={habit.name}
                   onToggle={() => toggleCompletion(habit.id, today)}
                 />
                 <span
-                  className={`truncate text-sm ${
+                  className={`truncate text-[1.0625rem] ${
                     isDone(habit.id) ? "text-ink-muted line-through" : "text-ink"
                   }`}
                 >
@@ -73,7 +78,7 @@ export function HabitsTodayCard() {
           </ul>
 
           {scheduled.length > MAX_LISTED && (
-            <p className="text-xs text-ink-muted">
+            <p className="text-sm text-ink-muted">
               y {scheduled.length - MAX_LISTED} más en Hábitos
             </p>
           )}

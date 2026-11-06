@@ -5,6 +5,7 @@ import { outlineButtonClassName } from "@/core/components/buttonStyles";
 import { ConfirmDialog } from "@/core/components/ConfirmDialog";
 import { FormAlert } from "@/core/components/FormAlert";
 import { PlusIcon } from "@/core/components/icons";
+import { emptyStateClassName, listSheetClassName, sheetClassName } from "@/core/components/surfaces";
 import { formatMonth, type MonthKey } from "@/core/lib/dates";
 import { EXPENSE_CATEGORIES, categoryLabel } from "../constants";
 import { useBudgets } from "../hooks/useBudgets";
@@ -16,8 +17,7 @@ import { BudgetForm } from "./BudgetForm";
 import { BudgetProgress } from "./BudgetProgress";
 import { MonthNav } from "./MonthNav";
 
-const listClassName =
-  "divide-y divide-border rounded-2xl border border-border bg-paper-elevated shadow-[0_1px_2px_rgba(20,32,43,0.05)]";
+const listClassName = `${listSheetClassName} px-5`;
 
 /** Budgets in force during the selected month, each against what was spent, plus create, edit and delete. */
 export function BudgetsBoard() {
@@ -30,7 +30,7 @@ export function BudgetsBoard() {
   const [deleting, setDeleting] = useState<Budget | null>(null);
 
   if (status === "loading" || spending.status === "loading") {
-    return <p className="text-sm text-ink-muted">Cargando tus presupuestos...</p>;
+    return <p className="text-ink-muted">Cargando tus presupuestos...</p>;
   }
   if (status === "error" || spending.status === "error") {
     return (
@@ -59,14 +59,14 @@ export function BudgetsBoard() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       {actionError && <FormAlert message={actionError} />}
 
       <MonthNav month={month} thisMonth={thisMonth} onChange={changeMonth} />
 
       <div
         aria-busy={spending.refreshing}
-        className={`flex flex-col gap-6 transition-opacity ${
+        className={`flex flex-col gap-8 transition-opacity ${
           spending.refreshing ? "opacity-60" : ""
         }`}
       >
@@ -76,7 +76,7 @@ export function BudgetsBoard() {
               const label = categoryLabel("expense", budget.category);
               if (editingCategory === budget.category) {
                 return (
-                  <li key={budget.category} className="px-4 py-4">
+                  <li key={budget.category} className="py-5">
                     <BudgetForm
                       categories={[{ key: budget.category, label }]}
                       initialLimit={budget.monthlyLimit}
@@ -111,15 +111,15 @@ export function BudgetsBoard() {
             })}
           </ul>
         ) : (
-          <p className="rounded-2xl border border-dashed border-rule px-4 py-6 text-center text-sm text-ink-muted">
+          <p className={emptyStateClassName}>
             Sin presupuestos en {formatMonth(shownMonth)}. Ponle un límite a la categoría en la que
             más gastas.
           </p>
         )}
 
         {creating ? (
-          <section className="rounded-2xl border border-border bg-paper-elevated p-4">
-            <h2 className="mb-3 font-display text-lg font-semibold text-ink">Nuevo presupuesto</h2>
+          <section className={`${sheetClassName} p-5 md:p-6`}>
+            <h2 className="mb-4 font-display text-[1.3125rem] font-bold text-ink">Nuevo presupuesto</h2>
             <BudgetForm
               categories={available}
               month={month}

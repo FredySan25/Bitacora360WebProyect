@@ -111,7 +111,7 @@ export function WatchlistItemForm({
       </div>
 
       {link && (
-        <div className="flex items-center gap-3 rounded-xl border border-border bg-paper p-2 sm:col-span-2">
+        <div className="flex items-center gap-3 rounded-lg border border-border bg-paper p-2 sm:col-span-2">
           <Poster
             url={link.posterUrl}
             title={title.trim() || "este título"}
@@ -119,9 +119,9 @@ export function WatchlistItemForm({
             sizes="48px"
             className="w-12 shrink-0 rounded-md"
           />
-          <div className="min-w-0 flex-1 text-sm">
-            <p className="text-ink">Del catálogo de {CATALOG_SOURCE_LABELS[link.catalogSource]}</p>
-            {link.releaseYear && <p className="text-xs text-ink-muted">{link.releaseYear}</p>}
+          <div className="min-w-0 flex-1 text-[0.9375rem]">
+            <p className="font-bold text-ink">Del catálogo de {CATALOG_SOURCE_LABELS[link.catalogSource]}</p>
+            {link.releaseYear && <p className="text-sm text-ink-muted">{link.releaseYear}</p>}
           </div>
           <button
             type="button"

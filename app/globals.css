@@ -1,42 +1,54 @@
 @import "tailwindcss";
 
-/* Bitácora360 palette — "clean board": cool neutral surfaces and a teal accent */
+/*
+ * Bitácora360 palette — "bitácora de rumbo": a squared nautical chart with the
+ * margin rule of a logbook. Navy ink, a course blue accent and a highlighter
+ * that marks where you are. Every text color passes WCAG AA on both surfaces.
+ */
 :root {
-  --paper: #f3f5f7;
-  --paper-elevated: #ffffff;
-  --ink: #14202b;
-  --ink-muted: #5b6b79;
-  --accent: #0f766e;
-  --accent-hover: #0b5f58;
+  --paper: #edf1f2;
+  --paper-elevated: #f8fafa;
+  --ink: #13293d;
+  --ink-muted: #56636f;
+  --accent: #2563a6;
+  --accent-hover: #1d4f86;
   --accent-foreground: #ffffff;
-  --border: #e1e5ea;
-  --rule: #d6dde3;
+  --border: #d3dce1;
+  --rule: #c3ced5;
   /* Status colors: money in, close to a limit, over a limit or destructive */
-  --positive: #047857;
+  --positive: #1f7a4d;
   /* Icons, stars and bars only: at least 3:1 on both surfaces */
-  --warning: #ca6f05;
-  --danger: #e11d48;
-  /* Chart series, validated as a pair against the elevated surface in each mode */
-  --series-income: #1f7fa8;
-  --series-expense: #b3521c;
+  --warning: #a86400;
+  --danger: #c0362c;
+  /* Chart series, a blue/orange pair told apart by hue and lightness */
+  --series-income: #2563a6;
+  --series-expense: #b4561a;
+  /* Highlighter behind the current place: the active menu item, the page title */
+  --highlight: #e9f25c;
+  /* Decorative only: the margin rule and the chart grid */
+  --margin: rgb(192 54 44 / 0.55);
+  --grid: rgb(19 41 61 / 0.05);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --paper: #0f1720;
-    --paper-elevated: #17212c;
-    --ink: #e8eef3;
-    --ink-muted: #9aa9b6;
-    --accent: #2fc4b2;
-    --accent-hover: #5ad6c7;
-    --accent-foreground: #0f1720;
-    --border: #263442;
-    --rule: #223040;
-    --positive: #34d399;
-    --warning: #fbbf24;
-    --danger: #fb7185;
-    --series-income: #3d9bc7;
-    --series-expense: #d6762f;
+    --paper: #0e1a26;
+    --paper-elevated: #132333;
+    --ink: #e3eaf0;
+    --ink-muted: #93a3b1;
+    --accent: #6fa8e8;
+    --accent-hover: #93bff0;
+    --accent-foreground: #0e1a26;
+    --border: #22344a;
+    --rule: #2c3e51;
+    --positive: #4cc38a;
+    --warning: #f2b544;
+    --danger: #f0705f;
+    --series-income: #6fa8e8;
+    --series-expense: #e08a4a;
+    --highlight: rgb(201 212 63 / 0.38);
+    --margin: rgb(240 112 95 / 0.5);
+    --grid: rgb(227 234 240 / 0.035);
   }
 }
 
@@ -57,14 +69,23 @@
   --color-danger: var(--danger);
   --color-series-income: var(--series-income);
   --color-series-expense: var(--series-expense);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-display: var(--font-geist-sans);
-  --shadow-card: 0 1px 2px rgb(20 32 43 / 0.06), 0 8px 24px rgb(20 32 43 / 0.06);
+  --color-highlight: var(--highlight);
+  --color-margin: var(--margin);
+  --font-sans: var(--font-atkinson-sans);
+  --font-mono: var(--font-atkinson-mono);
+  --font-display: var(--font-bricolage);
+  /* Sheets: forms, lists and cards. Set apart by a hairline, not a shadow */
+  --radius-sheet: 10px;
+  --shadow-card: 0 1px 0 var(--rule);
 }
 
 body {
-  background: var(--paper);
+  background-color: var(--paper);
+  /* The chart grid: 24 px squares behind every page */
+  background-image:
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
   color: var(--ink);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
@@ -77,41 +98,55 @@ body {
   }
 }
 
-/*
- * Ruled-notebook texture for logbook-style backgrounds. The lines fade out
- * behind the centered content so they don't compete with the text, and on
- * wider screens a margin rule is drawn on the left, like a real notebook.
- */
-.bg-notebook-lines {
-  position: relative;
-  isolation: isolate;
-}
+@layer components {
+  /* Bricolage Grotesque, condensed: titles and big figures only */
+  .font-display {
+    font-stretch: 82%;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
 
-.bg-notebook-lines::before {
-  --notebook-rules: repeating-linear-gradient(
-    to bottom,
-    transparent 0 27px,
-    color-mix(in oklab, var(--rule) 75%, transparent) 27px 28px
-  );
+  /*
+   * Highlighter stroke under the current place (the active menu item, the page
+   * title). It only reinforces: the place is always also told by text or
+   * aria-current. Wraps line by line on long titles.
+   */
+  .highlight-mark {
+    background-image: linear-gradient(
+      transparent 58%,
+      var(--highlight) 58%,
+      var(--highlight) 94%,
+      transparent 94%
+    );
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
 
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background-image: var(--notebook-rules);
-  mask-image: radial-gradient(ellipse 55% 50% at 50% 45%, rgb(0 0 0 / 0.2), #000);
-}
+  /* Dotted leader between a label and its amount, like a ledger */
+  .ledger-leader {
+    flex: 1 1 1.5rem;
+    min-width: 1.5rem;
+    border-bottom: 1.5px dotted var(--rule);
+    transform: translateY(-0.3rem);
+  }
 
-@media (min-width: 768px) {
-  .bg-notebook-lines::before {
-    background-image:
-      linear-gradient(
-        to right,
-        transparent 72px,
-        color-mix(in oklab, var(--accent) 35%, transparent) 72px 73px,
-        transparent 73px
-      ),
-      var(--notebook-rules);
+  /* Red margin rule of a logbook, drawn on the left of the content from md up */
+  .bg-margin-rule {
+    position: relative;
+    isolation: isolate;
+  }
+
+  @media (min-width: 768px) {
+    .bg-margin-rule::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 1.75rem;
+      z-index: -1;
+      width: 1px;
+      background: var(--margin);
+      pointer-events: none;
+    }
   }
 }

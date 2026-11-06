@@ -28,7 +28,7 @@ export function Poster({ url, title, mediaType, sizes, decorative, className }: 
 
   return (
     <div
-      className={`relative aspect-[2/3] overflow-hidden rounded-xl border border-border bg-paper ${className ?? ""}`}
+      className={`relative aspect-[2/3] overflow-hidden rounded-[3px_8px_8px_3px] bg-paper ${className ?? ""}`}
     >
       {url && url !== failedUrl ? (
         <Image
@@ -46,11 +46,13 @@ export function Poster({ url, title, mediaType, sizes, decorative, className }: 
           role={decorative ? undefined : "img"}
           aria-label={decorative ? undefined : noPosterLabel(title, mediaType)}
           aria-hidden={decorative || undefined}
-          className="flex h-full items-center justify-center bg-ink/5 text-ink-muted/50"
+          className="flex h-full items-center justify-center bg-ink/10 text-ink-muted"
         >
           <Icon className="h-1/3 w-1/3 max-h-12 max-w-12" />
         </div>
       )}
+      {/* The spine of the cover */}
+      <span aria-hidden="true" className="pointer-events-none absolute inset-y-0 left-0 w-1.5 bg-black/15" />
     </div>
   );
 }

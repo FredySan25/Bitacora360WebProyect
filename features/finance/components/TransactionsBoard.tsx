@@ -6,6 +6,12 @@ import { ConfirmDialog } from "@/core/components/ConfirmDialog";
 import { FormAlert } from "@/core/components/FormAlert";
 import { PlusIcon } from "@/core/components/icons";
 import {
+  emptyStateClassName,
+  listSheetClassName,
+  ruledHeadingClassName,
+  sheetClassName,
+} from "@/core/components/surfaces";
+import {
   formatDateKey,
   formatMonth,
   lastDayOf,
@@ -25,11 +31,9 @@ import { NO_FILTERS, TransactionFilters, matchesFilter } from "./TransactionFilt
 import { TransactionForm } from "./TransactionForm";
 import { TransactionItem } from "./TransactionItem";
 
-const listClassName =
-  "divide-y divide-border rounded-2xl border border-border bg-paper-elevated shadow-[0_1px_2px_rgba(20,32,43,0.05)]";
+const listClassName = `${listSheetClassName} px-5`;
 
-const emptyClassName =
-  "rounded-2xl border border-dashed border-rule px-4 py-6 text-center text-sm text-ink-muted";
+const emptyClassName = emptyStateClassName;
 
 /** Transactions of the selected month: totals, the list with its filters, and create, edit and delete. */
 export function TransactionsBoard() {
@@ -55,7 +59,7 @@ export function TransactionsBoard() {
   const [savedElsewhere, setSavedElsewhere] = useState<MonthKey | null>(null);
 
   if (status === "loading") {
-    return <p className="text-sm text-ink-muted">Cargando tus movimientos...</p>;
+    return <p className="text-ink-muted">Cargando tus movimientos...</p>;
   }
   if (status === "error") {
     return (
@@ -87,20 +91,20 @@ export function TransactionsBoard() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       {actionError && <FormAlert message={actionError} />}
 
       <MonthNav month={month} thisMonth={thisMonth} onChange={changeMonth} />
 
       <div
         aria-busy={refreshing}
-        className={`flex flex-col gap-6 transition-opacity ${refreshing ? "opacity-60" : ""}`}
+        className={`flex flex-col gap-8 transition-opacity ${refreshing ? "opacity-60" : ""}`}
       >
         <SummaryCards totals={totalsOf(monthTransactions)} />
 
         {creating ? (
-          <section className="rounded-2xl border border-border bg-paper-elevated p-4">
-            <h2 className="mb-3 font-display text-lg font-semibold text-ink">Nuevo movimiento</h2>
+          <section className={`${sheetClassName} p-5 md:p-6`}>
+            <h2 className="mb-4 font-display text-[1.3125rem] font-bold text-ink">Nuevo movimiento</h2>
             <TransactionForm
               // Past months start on their last day, so the transaction lands in the month on screen
               defaultDate={month === thisMonth ? today : lastDayOf(month)}
@@ -129,13 +133,13 @@ export function TransactionsBoard() {
         )}
 
         {savedElsewhere && (
-          <p role="status" className="text-sm text-ink-muted">
+          <p role="status" className="text-ink">
             Guardado en {formatMonth(savedElsewhere)}. Cambia de mes para verlo.
           </p>
         )}
 
         <section className="flex flex-col gap-3">
-          <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted">
+          <h2 className={ruledHeadingClassName}>
             Movimientos
           </h2>
 

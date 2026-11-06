@@ -3,6 +3,7 @@
 import { useId, useState, type FormEvent } from "react";
 import { ghostButtonClassName } from "@/core/components/buttonStyles";
 import { SelectField } from "@/core/components/SelectField";
+import { segmentClassName, segmentGroupClassName } from "@/core/components/surfaces";
 import { SubmitButton } from "@/core/components/SubmitButton";
 import { TextField } from "@/core/components/TextField";
 import type { DateKey } from "@/core/lib/dates";
@@ -64,16 +65,12 @@ export function TransactionForm({
   return (
     <form onSubmit={handleSubmit} className="grid gap-4 sm:grid-cols-2">
       <fieldset className="sm:col-span-2" disabled={saving}>
-        <legend className="mb-1.5 text-sm font-medium text-ink">Tipo</legend>
-        <div className="inline-flex gap-1 rounded-xl border border-border bg-paper p-1">
+        <legend className="mb-1.5 text-sm font-bold text-ink">Tipo</legend>
+        <div className={segmentGroupClassName}>
           {TRANSACTION_TYPES.map((option) => (
             <label
               key={option.value}
-              className={`relative rounded-lg px-3.5 py-1.5 text-sm font-medium transition has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-accent ${
-                type === option.value
-                  ? "bg-accent/10 text-accent"
-                  : "text-ink-muted hover:bg-ink/5 hover:text-ink"
-              }`}
+              className={segmentClassName(type === option.value)}
             >
               {/* Covers the whole pill, so a click anywhere on it lands on the radio */}
               <input

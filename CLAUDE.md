@@ -61,31 +61,86 @@ Antes de dar por terminado un cambio pasan los tres últimos.
 
 ## Sistema de diseño
 
-La dirección visual ya está fijada y toda pantalla nueva la sigue. No se
-cambian paleta, tipografía, radios ni sombras salvo que se pida un rediseño
-explícitamente.
+Las reglas de diseño tienen dos capas: la identidad visual, que se puede
+reemplazar con un rediseño, y la disciplina técnica, que se mantiene siempre.
+La identidad se decide con libertad y después se fija, para que las pantallas
+hechas en sesiones distintas se vean como una sola app.
 
-- **Tokens**: la paleta "clean board" (neutros fríos y acento teal, con modo
-  oscuro) vive en `app/globals.css` y se expone a Tailwind con `@theme`. Los
-  colores se usan solo por token (`bg-paper`, `bg-paper-elevated`, `text-ink`,
-  `text-ink-muted`, `text-accent`, `border-border`, `text-positive`,
-  `text-warning`, `text-danger`, `series-income`/`series-expense`), nunca con hex
-  sueltos ni la paleta por defecto de Tailwind (`gray-*`, `teal-*`…).
-- **Tipografía**: Geist y Geist Mono, cargadas en `app/layout.tsx`.
-- **Superficies**: las tarjetas usan `rounded-2xl`, `bg-paper-elevated` y
-  `shadow-card`; los fondos de bitácora, `.bg-notebook-lines`.
+### Identidad visual vigente
+
+Toda pantalla nueva la sigue hasta que un rediseño la reemplace. Fuera de un
+rediseño no se cambian paleta, tipografía, radios, sombras ni fondos.
+
+"Bitácora de rumbo": una carta náutica cuadriculada con la línea de margen de
+un cuaderno de bitácora.
+
+- **Paleta**: tinta azul marino (`ink`), acento azul de rumbo (`accent`) y un
+  marcador amarillo (`highlight`) que subraya dónde estás. El rojo de `danger`
+  es también el de la línea de margen (`margin`). Con modo oscuro.
+- **Tipografía**: Bricolage Grotesque condensada (`font-display`, solo títulos
+  y cifras grandes), Atkinson Hyperlegible Next para el texto y Atkinson
+  Hyperlegible Mono para lo monoespaciado. Se cargan en `app/layout.tsx`.
+- **Superficies**: hojas con `rounded-sheet` (10 px), `bg-paper-elevated` y
+  borde de 1 px, sin sombra. Las clases están en `core/components/surfaces.ts`
+  (hoja, lista, vacío, encabezados, pestañas, fila de cifras, opciones
+  segmentadas). Una sección que no va sobre una hoja lleva el `h2` subrayado
+  en tinta (`ruledHeadingClassName`).
+- **Fondo y marcas**: la cuadrícula de 24 px va en el `body`, la línea de
+  margen roja con `.bg-margin-rule`, el marcador con `.highlight-mark` (título
+  de cada página e ítem activo del menú) y los puntos guía de libro contable
+  con `.ledger-leader`.
+- **Firma**: la rosa 360 de Hoy (`YearRose`): el año como un dial, con un día
+  por marca. Su versión sin datos (`CompassRose`) acompaña al acceso, y el
+  logo (`LogoMark`) es la misma figura en chico.
+
+### Rediseño
+
+Un rediseño se pide explícitamente, de toda la app o de una pantalla. En él, la
+skill `frontend-design` trabaja con libertad total: puede proponer una
+identidad nueva (paleta, tipografía, radios, sombras, fondos), layout,
+jerarquía, movimiento y textos. Al cerrarlo:
+
+- La identidad nueva queda como tokens en `app/globals.css` y en los
+  componentes de `core/components/`, y la sección "Identidad visual vigente"
+  se reescribe para describirla. Desde ahí, es la que siguen las pantallas
+  nuevas.
+- No conviven dos identidades: si el rediseño es de una sola pantalla y trae
+  una identidad nueva, esta se aplica a toda la app en el mismo cambio, o la
+  pantalla se rediseña dentro de la identidad vigente.
+- Los textos visibles pueden cambiar, actualizando `support/locales/es.ts` del
+  proyecto E2E en el mismo cambio.
+- La estructura HTML que lista la sección E2E de Testing se conserva. Si el
+  rediseño necesita cambiarla, se avisa antes de hacerlo y el page object se
+  actualiza en el mismo cambio. Cambiar un elemento nativo por uno armado con
+  `div`s (un `select`, un `dialog`, una `table`) no es un cambio visual: se
+  pide aparte.
+
+Fuera de un rediseño, `frontend-design` aplica sus criterios (jerarquía,
+espaciado, movimiento con moderación) dentro de la identidad vigente: puede
+cambiar clases de Tailwind, layout, espaciado y animaciones, pero no los
+textos visibles (su consejo de redacción no aplica al pulido visual) ni la
+identidad.
+
+### Reglas que se mantienen siempre
+
+- **Tokens**: los colores viven en `app/globals.css` y se exponen a Tailwind
+  con `@theme`. Se usan solo por token (hoy: `bg-paper`, `bg-paper-elevated`,
+  `text-ink`, `text-ink-muted`, `text-accent`, `border-border`,
+  `text-positive`, `text-warning`, `text-danger`,
+  `series-income`/`series-expense`, `bg-highlight`, `margin`), nunca con hex sueltos ni la paleta por
+  defecto de Tailwind (`gray-*`, `teal-*`…). Toda identidad cubre modo claro y
+  oscuro.
 - **Componentes**: antes de crear estilos se reutiliza lo de `core/components/`
   (`PageHeader`, `ModuleCard`, `TextField`, `SelectField`, `SubmitButton`,
-  `FormAlert`, `ConfirmDialog`, `icons.tsx` y las clases de `buttonStyles.ts`).
+  `FormAlert`, `ConfirmDialog`, `icons.tsx` y las clases de `buttonStyles.ts`
+  y `surfaces.ts`).
+  Un rediseño cambia el estilo ahí, no copiándolo en cada pantalla.
 - **Accesibilidad**: un estado se comunica con ícono y texto, no solo con color;
-  todo control conserva el foco visible de `globals.css`.
-- **Skill `frontend-design`**: está habilitado para este proyecto. Sus criterios
-  (jerarquía, espaciado, movimiento con moderación) se aplican dentro de este
-  sistema; su búsqueda de una identidad visual nueva solo aplica a un
-  rediseño pedido explícitamente. Puede cambiar clases de Tailwind, layout,
-  espaciado y animaciones, pero no los textos visibles (su consejo de
-  redacción no aplica al pulido visual) ni lo que lista la sección E2E de
-  Testing.
+  todo control conserva el foco visible de `globals.css`; el texto tiene
+  contraste suficiente (WCAG AA) en los dos modos.
+- **HTML semántico**: se usan elementos nativos (`label`, `select`, `dialog`,
+  `fieldset/legend`, headings con su nivel). Las pruebas E2E se apoyan en
+  ellos, así que también los protege la sección E2E de Testing.
 
 ## Módulo de hábitos
 
@@ -166,6 +221,26 @@ Ruta: `/watchlist`. Películas, series y libros en una sola tabla
   la barra lateral, el pie del dashboard en el celular y el pie de la watchlist.
   No se quitan: si la app llegara a cobrar o a mostrar anuncios, haría falta una
   licencia comercial de TMDB.
+
+## Página Hoy
+
+`/today` junta una tarjeta por módulo (`HabitsTodayCard`, `FinanceMonthCard`,
+`WatchlistCard`) y, en el encabezado, la línea "Día N del año" (`DayOfYear`) y
+la rosa 360. La rosa es lo único que cruza módulos, así que se arma en la
+propia página (`app/(dashboard)/today/TodayRose.tsx`). La frontera de
+`features/` no aplica a `app/`, y desde ahí se leen los hooks de hábitos, gym,
+presupuestos y movimientos. Cada módulo pone su parte como función pura en su
+`stats.ts` (`completionLevel`, `isOverBudget`), y el dibujo vive en
+`core/components/YearRose.tsx`, que no sabe de dónde vienen los datos.
+
+- La fecha es la del navegador (`core/hooks/useClientToday.ts`): en el servidor
+  no se dibuja nada que dependa del día.
+- La rosa repite las cargas de las tarjetas, pero en rangos más largos
+  (movimientos desde enero, 150 entrenamientos). Marcar un hábito en la
+  tarjeta no redibuja la rosa hasta recargar.
+- Su nombre accesible resume lo que dibuja (días con hábitos completos, días
+  con gym, meses con presupuesto excedido): es lo que leen un lector de
+  pantalla y las pruebas E2E.
 
 ## Backend
 
@@ -249,8 +324,8 @@ interfaz por roles, textos y estructura HTML. Estas cosas no se cambian
 salvo que se pida, venga el cambio de donde venga:
 
 - Textos visibles, `label`, `aria-label` y el `alt` de las imágenes. Viven en
-  `support/locales/es.ts` del proyecto E2E; si un cambio pedido los toca, se
-  actualizan ahí.
+  `support/locales/es.ts` del proyecto E2E; si un cambio pedido los toca (un
+  rediseño puede hacerlo, ver "Sistema de diseño"), se actualizan ahí.
 - Roles y elementos nativos: `form`, `section`, `details/summary`,
   `figcaption`, `dialog`, `button[type="submit"]`, el `label` que envuelve
   cada estrella de la watchlist, `optgroup`, y los headings con su nivel.
@@ -260,6 +335,7 @@ salvo que se pida, venga el cambio de donde venga:
   `th scope="row"`, los `role` explícitos (`group`, `img`, `progressbar`,
   `status`, `alert`) y los `<p>` que se ubican como párrafo: el mes del
   selector de finanzas y las etiquetas de las cifras de `/habits/progress`.
+  En `/today`, el `img` de la rosa 360 con su nombre accesible y su leyenda.
 - Orden y cantidad: en `/habits`, `/login` y cada paso de `/register` hay un
   solo `<form>`, y en `/habits` un solo `<details>`; las tarjetas de resumen
   de finanzas son un `group` con sus párrafos en este orden: etiqueta, monto

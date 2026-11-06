@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { ghostButtonClassName } from "./buttonStyles";
+import { dangerButtonClassName, outlineButtonClassName } from "./buttonStyles";
 
 type ConfirmDialogProps = {
   title: string;
@@ -53,21 +53,21 @@ export function ConfirmDialog({
         e.preventDefault();
         if (!working) onCancel();
       }}
-      className="m-auto w-[calc(100%-2rem)] max-w-sm rounded-2xl border border-border bg-paper-elevated p-5 text-ink shadow-card backdrop:bg-ink/40"
+      className="m-auto w-[calc(100%-2rem)] max-w-md rounded-sheet border-[1.5px] border-ink bg-paper-elevated p-6 text-ink backdrop:bg-ink/55"
     >
-      <h2 id={titleId} className="font-display text-lg font-semibold text-ink">
+      <h2 id={titleId} className="font-display text-[1.75rem] leading-tight font-bold text-ink">
         {title}
       </h2>
-      <p id={messageId} className="mt-2 text-sm text-ink-muted">
+      <p id={messageId} className="mt-3 text-[0.9375rem] text-ink">
         {message}
       </p>
-      <div className="mt-5 flex flex-wrap justify-end gap-2">
+      <div className="mt-6 flex flex-wrap justify-end gap-2">
         <button
           type="button"
           autoFocus
           onClick={onCancel}
           disabled={working}
-          className={ghostButtonClassName}
+          className={outlineButtonClassName}
         >
           Cancelar
         </button>
@@ -76,7 +76,7 @@ export function ConfirmDialog({
           onClick={handleConfirm}
           disabled={working}
           aria-busy={working}
-          className="inline-flex items-center gap-1.5 rounded-lg bg-danger px-3 py-1.5 text-sm font-medium text-paper-elevated transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+          className={dangerButtonClassName}
         >
           {confirmLabel}
         </button>

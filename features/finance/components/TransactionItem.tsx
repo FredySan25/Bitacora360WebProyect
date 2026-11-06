@@ -31,7 +31,7 @@ export function TransactionItem({
 }: TransactionItemProps) {
   if (editing) {
     return (
-      <li className="px-4 py-4">
+      <li className="py-5">
         <TransactionForm
           initial={transaction}
           defaultDate={transaction.occurredOn}
@@ -47,20 +47,21 @@ export function TransactionItem({
   const isIncome = transaction.type === "income";
 
   return (
-    <li className="flex items-center gap-2 px-4 py-3">
-      <div className="min-w-0 flex-1">
-        <p className="truncate font-medium text-ink">
+    <li className="flex items-center gap-2 py-3">
+      <div className="min-w-0 shrink">
+        <p className="truncate font-bold text-ink">
           {categoryLabel(transaction.type, transaction.category)}
         </p>
-        <p className="truncate text-xs text-ink-muted">
+        <p className="truncate text-[0.8125rem] text-ink-muted">
           {formatDateKey(transaction.occurredOn, { day: "numeric", month: "short" })}
           {transaction.note && ` · ${transaction.note}`}
         </p>
       </div>
+      <span aria-hidden="true" className="h-px min-w-6 flex-1 border-b-[1.5px] border-dotted border-rule" />
 
       {/* The sign tells income from expense; the color only reinforces it */}
       <p
-        className={`shrink-0 text-sm font-semibold tabular-nums ${
+        className={`shrink-0 text-[1.0625rem] font-bold tabular-nums ${
           isIncome ? "text-positive" : "text-ink"
         }`}
       >

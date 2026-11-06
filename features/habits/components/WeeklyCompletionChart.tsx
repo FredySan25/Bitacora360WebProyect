@@ -38,17 +38,17 @@ export function WeeklyCompletionChart({ weeks }: { weeks: WeekPoint[] }) {
   return (
     <figure>
       <figcaption className="mb-4 flex items-baseline gap-2" aria-live="polite">
-        <span className="text-2xl font-semibold text-ink">
+        <span className="font-display text-[2rem] font-bold text-ink tabular-nums">
           {shownPercent === null ? "—" : `${shownPercent}%`}
         </span>
-        <span className="text-xs text-ink-muted">
+        <span className="text-sm text-ink-muted">
           {weekRange(shown)} · {weekSummary(shown)}
         </span>
       </figcaption>
 
       <div className="flex gap-2">
         {/* Y axis */}
-        <div className="relative h-40 w-8 shrink-0 text-right text-[10px] tabular-nums text-ink-muted">
+        <div className="relative h-40 w-8 shrink-0 text-right text-xs tabular-nums text-ink-muted">
           {Y_TICKS.map((tick) => (
             <span
               key={tick}
@@ -69,7 +69,7 @@ export function WeeklyCompletionChart({ weeks }: { weeks: WeekPoint[] }) {
             {Y_TICKS.map((tick) => (
               <div
                 key={tick}
-                className="absolute inset-x-0 border-t border-border"
+                className="absolute inset-x-0 border-t border-rule"
                 style={{ bottom: `${tick}%` }}
               />
             ))}
@@ -104,7 +104,7 @@ export function WeeklyCompletionChart({ weeks }: { weeks: WeekPoint[] }) {
           </div>
 
           {/* X axis: every other week, always including the current one */}
-          <div className="mt-1.5 flex text-[10px] tabular-nums text-ink-muted">
+          <div className="mt-1.5 flex text-xs tabular-nums text-ink-muted">
             {weeks.map((week, i) => (
               <span key={week.weekStart} className="flex-1 text-center">
                 {(weeks.length - 1 - i) % 2 === 0 &&

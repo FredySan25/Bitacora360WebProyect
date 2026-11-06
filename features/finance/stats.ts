@@ -122,3 +122,22 @@ export function ruleBreakdown(transactions: Transaction[]): RuleBreakdown {
 export function savedTowards(goal: SavingsGoal): number {
   return sumAmounts(goal.contributions.map((contribution) => contribution.amount));
 }
+
+/**
+ * Whether any budget in force during `month` was exceeded, from that month's
+ * transactions. Null when the month had no budget at all.
+ */
+export function isOverBudget(
+  budgets: Budget[],
+  transactions: Transaction[],
+  month: MonthKey,
+): boolean | null {
+  const active = activeBudgets(budgets, month);
+  if (active.length === 0) return null;
+  const spent = new Map(
+    expensesByCategory(transactionsOf(transactions, month)).map((row) => [row.category, row.total]),
+  );
+  return active.some(
+    (budget) => budgetState(spent.get(budget.category) ?? 0, budget.monthlyLimit) === "over",
+  );
+}

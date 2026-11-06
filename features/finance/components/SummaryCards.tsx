@@ -1,5 +1,11 @@
 import { useId, type ReactNode } from "react";
 import { ArrowDownIcon, ArrowUpIcon } from "@/core/components/icons";
+import {
+  figureCellClassName,
+  figureRowClassName,
+  figureValueClassName,
+  labelClassName,
+} from "@/core/components/surfaces";
 import { formatMonth, type MonthKey } from "@/core/lib/dates";
 import { formatMoney, formatPercent, formatSignedMoney } from "../format";
 import { percentChange, savingsRate, type MonthTotals } from "../stats";
@@ -15,22 +21,18 @@ function Tile({ label, value, children }: TileProps) {
   const labelId = useId();
 
   return (
-    <div
-      role="group"
-      aria-labelledby={labelId}
-      className="rounded-2xl border border-border bg-paper-elevated p-4"
-    >
-      <p id={labelId} className="text-xs font-medium text-ink-muted">
+    <div role="group" aria-labelledby={labelId} className={figureCellClassName}>
+      <p id={labelId} className={labelClassName}>
         {label}
       </p>
-      <p className="mt-1 text-2xl font-semibold text-ink">{value}</p>
+      <p className={figureValueClassName}>{value}</p>
       {children}
     </div>
   );
 }
 
 function Detail({ children }: { children: ReactNode }) {
-  return <p className="mt-0.5 text-xs text-ink-muted">{children}</p>;
+  return <p className="text-[0.8125rem] text-ink-muted">{children}</p>;
 }
 
 type DeltaProps = {
@@ -51,7 +53,7 @@ function Delta({ difference, text, upIsGood, against }: DeltaProps) {
   const up = difference > 0;
   const Arrow = up ? ArrowUpIcon : ArrowDownIcon;
   return (
-    <p className="mt-0.5 flex items-center gap-1 text-xs text-ink-muted">
+    <p className="flex items-center gap-1 text-[0.8125rem] text-ink-muted">
       <Arrow className={`h-3.5 w-3.5 shrink-0 ${up === upIsGood ? "text-positive" : "text-danger"}`} />
       <span>
         {text} vs. {against}
@@ -91,7 +93,7 @@ export function SummaryCards({ totals, previous, showSavingsRate }: SummaryCards
   }
 
   return (
-    <div className={`grid gap-3 sm:grid-cols-3 ${showSavingsRate ? "lg:grid-cols-4" : ""}`}>
+    <div className={figureRowClassName}>
       <Tile label="Ingresos" value={formatMoney(totals.income)}>
         {previous &&
           change(totals.income, previous.totals.income, true, `Sin ingresos en ${against}`)}

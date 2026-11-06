@@ -33,19 +33,19 @@ export function TrendChart({ points }: { points: TrendPoint[] }) {
   return (
     <figure>
       <figcaption className="mb-3 flex flex-col gap-0.5" aria-live="polite">
-        <span className="text-sm font-medium text-ink first-letter:uppercase">
+        <span className="font-display text-[1.375rem] font-bold text-ink first-letter:uppercase">
           {formatMonth(shown.month)}
         </span>
-        <span className="text-xs text-ink-muted">
+        <span className="text-[0.9375rem] text-ink-muted tabular-nums">
           Ingresos {formatMoney(shown.income)} · Gastos {formatMoney(shown.expenses)} · Balance{" "}
           {formatMoney(shown.balance)}
         </span>
       </figcaption>
 
-      <ul className="mb-4 flex gap-4 text-xs text-ink-muted">
+      <ul className="mb-4 flex gap-5 text-sm text-ink">
         {SERIES.map((series) => (
           <li key={series.key} className="flex items-center gap-1.5">
-            <span aria-hidden="true" className={`h-2.5 w-2.5 rounded-sm ${series.className}`} />
+            <span aria-hidden="true" className={`h-3.5 w-3.5 rounded-sm ${series.className}`} />
             {series.label}
           </li>
         ))}
@@ -53,7 +53,7 @@ export function TrendChart({ points }: { points: TrendPoint[] }) {
 
       <div className="flex gap-2">
         {/* Y axis */}
-        <div className="relative h-44 w-10 shrink-0 text-right text-[10px] tabular-nums text-ink-muted">
+        <div className="relative h-44 w-10 shrink-0 text-right text-xs tabular-nums text-ink-muted">
           {ticks.map((tick, i) => (
             <span
               key={tick}
@@ -74,7 +74,7 @@ export function TrendChart({ points }: { points: TrendPoint[] }) {
             {ticks.map((tick, i) => (
               <div
                 key={tick}
-                className="absolute inset-x-0 border-t border-border"
+                className="absolute inset-x-0 border-t border-rule"
                 style={{ bottom: `${100 - i * 50}%` }}
               />
             ))}
@@ -111,7 +111,7 @@ export function TrendChart({ points }: { points: TrendPoint[] }) {
           </div>
 
           {/* X axis */}
-          <div className="mt-1.5 flex text-[10px] text-ink-muted">
+          <div className="mt-1.5 flex text-[0.8125rem] text-ink-muted">
             {points.map((point) => (
               <span key={point.month} className="flex-1 text-center">
                 {formatMonth(point.month, { month: "short" })}

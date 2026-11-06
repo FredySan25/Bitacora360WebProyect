@@ -1,4 +1,4 @@
-import { ghostButtonClassName, iconButtonClassName } from "@/core/components/buttonStyles";
+import { iconButtonClassName, linkButtonClassName } from "@/core/components/buttonStyles";
 import { ChevronLeftIcon, ChevronRightIcon } from "@/core/components/icons";
 import { addMonths, formatMonth, type MonthKey } from "@/core/lib/dates";
 
@@ -23,7 +23,7 @@ export function MonthNav({ month, thisMonth, onChange }: MonthNavProps) {
       </button>
       <p
         aria-live="polite"
-        className="min-w-44 text-center font-display text-xl font-semibold leading-tight text-ink first-letter:uppercase"
+        className="min-w-52 text-center font-display text-[1.75rem] leading-tight font-bold text-ink first-letter:uppercase"
       >
         {formatMonth(month)}
       </p>
@@ -37,7 +37,11 @@ export function MonthNav({ month, thisMonth, onChange }: MonthNavProps) {
         <ChevronRightIcon className="h-5 w-5" />
       </button>
       {month !== thisMonth && (
-        <button type="button" onClick={() => onChange(thisMonth)} className={ghostButtonClassName}>
+        <button
+          type="button"
+          onClick={() => onChange(thisMonth)}
+          className={linkButtonClassName}
+        >
           Mes actual
         </button>
       )}

@@ -81,3 +81,14 @@ export function rangeTotals(
 export function percent({ scheduled, done }: Totals): number | null {
   return scheduled === 0 ? null : Math.round((done / scheduled) * 100);
 }
+
+/** How much of a day's habits got done, in four steps; null when nothing was scheduled. */
+export type CompletionLevel = 0 | 1 | 2 | 3 | null;
+
+/** 0 none, 1 under half, 2 half or more, 3 all of them. */
+export function completionLevel({ scheduled, done }: Totals): CompletionLevel {
+  if (scheduled === 0) return null;
+  if (done === 0) return 0;
+  if (done === scheduled) return 3;
+  return done * 2 < scheduled ? 1 : 2;
+}

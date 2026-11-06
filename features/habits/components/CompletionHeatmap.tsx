@@ -38,15 +38,15 @@ export function CompletionHeatmap({ days, today }: { days: DayPoint[]; today: Da
 
   return (
     <figure>
-      <figcaption className="mb-3 text-xs text-ink-muted" aria-live="polite">
-        <span className="font-semibold text-ink first-letter:uppercase">
+      <figcaption className="mb-3 text-sm text-ink-muted" aria-live="polite">
+        <span className="font-bold text-ink first-letter:uppercase">
           {formatDateKey(shown.day, { weekday: "short", day: "numeric", month: "short" })}
         </span>{" "}
         · {daySummary(shown.totals)}
       </figcaption>
 
       <div className="flex max-w-xl gap-1.5">
-        <div className="grid grid-rows-7 gap-1 text-[10px] leading-none text-ink-muted">
+        <div className="grid grid-rows-7 gap-1 text-xs leading-none text-ink-muted">
           {ROW_LABELS.map((label, i) => (
             <span key={i} className="flex items-center">
               {label}
@@ -72,7 +72,7 @@ export function CompletionHeatmap({ days, today }: { days: DayPoint[]; today: Da
         </div>
       </div>
 
-      <div className="mt-3 flex items-center gap-1.5 text-[10px] text-ink-muted">
+      <div className="mt-3 flex items-center gap-1.5 text-xs text-ink-muted">
         <span>Menos</span>
         {LEVELS.map((level) => (
           <span key={level} className={`h-3 w-3 rounded-[3px] ${level}`} />

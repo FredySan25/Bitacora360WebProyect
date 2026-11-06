@@ -10,22 +10,22 @@ const STATES: Record<
 > = {
   ok: {
     label: "En orden",
-    fill: "bg-positive",
-    track: "bg-positive/20",
+    fill: "bg-accent",
+    track: "bg-rule",
     text: "text-positive",
     icon: CheckIcon,
   },
   warning: {
     label: "Cerca del límite",
     fill: "bg-warning",
-    track: "bg-warning/20",
+    track: "bg-rule",
     text: "text-warning",
     icon: AlertIcon,
   },
   over: {
     label: "Excedido",
     fill: "bg-danger",
-    track: "bg-danger/20",
+    track: "bg-rule",
     text: "text-danger",
     icon: AlertIcon,
   },
@@ -58,17 +58,17 @@ export function BudgetProgress({ label, spent, limit, onEdit, onDelete }: Budget
   const difference = sumAmounts([limit, -spent]);
 
   return (
-    <li className="px-4 py-4">
+    <li className="py-5">
       <div className="flex items-start gap-2">
         <div className="min-w-0 flex-1">
-          <p className="truncate font-medium text-ink">{label}</p>
-          <p className="text-xs text-ink-muted">
+          <p className="truncate font-display text-[1.375rem] font-bold text-ink">{label}</p>
+          <p className="text-sm text-ink-muted tabular-nums">
             {formatMoney(spent)} de {formatMoney(limit)}
           </p>
         </div>
 
         {/* Icon and label carry the state; the color only reinforces it */}
-        <p className="flex shrink-0 items-center gap-1 py-1.5 text-xs font-medium text-ink">
+        <p className="flex shrink-0 items-center gap-1.5 py-2.5 text-sm font-bold text-ink">
           <StateIcon className={`h-4 w-4 ${text}`} />
           {stateLabel}
         </p>
@@ -98,15 +98,17 @@ export function BudgetProgress({ label, spent, limit, onEdit, onDelete }: Budget
         aria-valuemax={100}
         aria-valuenow={Math.min(percent, 100)}
         aria-valuetext={`${formatPercent(percent)}, ${stateLabel}`}
-        className={`mt-3 h-2 overflow-hidden rounded-full ${track}`}
+        className={`relative mt-3 h-3.5 overflow-hidden rounded-sm ${track}`}
       >
         <div
-          className={`h-full rounded-full transition-[width] ${fill}`}
+          className={`h-full transition-[width] motion-reduce:transition-none ${fill}`}
           style={{ width: `${Math.min(percent, 100)}%` }}
         />
+        {/* Where "Cerca del límite" starts */}
+        <span aria-hidden="true" className="absolute inset-y-0 left-[80%] border-l-[1.5px] border-dashed border-ink-muted" />
       </div>
 
-      <p className="mt-1.5 text-xs text-ink-muted">
+      <p className="mt-2 text-sm text-ink-muted tabular-nums">
         {formatPercent(percent)} usado ·{" "}
         {state === "over"
           ? `Te pasaste por ${formatMoney(-difference)}`

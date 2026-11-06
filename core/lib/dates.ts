@@ -85,3 +85,13 @@ export function lastDayOf(month: MonthKey): DateKey {
 export function formatMonth(month: MonthKey, options?: Intl.DateTimeFormatOptions): string {
   return formatDateKey(firstDayOf(month), options ?? { month: "long", year: "numeric" });
 }
+
+/** Index of `key` within its year: 0 for January 1. */
+export function dayOfYear(key: DateKey): number {
+  return daysBetween(`${key.slice(0, 4)}-01-01`, key);
+}
+
+/** 365, or 366 in a leap year. */
+export function daysInYear(year: number): number {
+  return new Date(year, 1, 29).getMonth() === 1 ? 366 : 365;
+}

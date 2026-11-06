@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
+import { tabClassName, tabListClassName } from "@/core/components/surfaces";
 import { MONTH_PARAM } from "../hooks/useSelectedMonth";
 
 const TABS = [
@@ -18,10 +19,7 @@ export function FinanceTabs() {
   const query = month ? `?${MONTH_PARAM}=${encodeURIComponent(month)}` : "";
 
   return (
-    <nav
-      aria-label="Secciones de finanzas"
-      className="mb-6 inline-flex max-w-full gap-1 overflow-x-auto rounded-xl border border-border bg-paper-elevated p-1"
-    >
+    <nav aria-label="Secciones de finanzas" className={tabListClassName}>
       {TABS.map((tab) => {
         const active = pathname === tab.href;
         return (
@@ -29,9 +27,7 @@ export function FinanceTabs() {
             key={tab.href}
             href={`${tab.href}${query}`}
             aria-current={active ? "page" : undefined}
-            className={`shrink-0 rounded-lg px-3.5 py-1.5 text-sm font-medium transition ${
-              active ? "bg-accent/10 text-accent" : "text-ink-muted hover:bg-ink/5 hover:text-ink"
-            }`}
+            className={tabClassName(active)}
           >
             {tab.label}
           </Link>

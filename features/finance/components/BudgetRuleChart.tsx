@@ -21,7 +21,7 @@ function categoriesIn(group: SpendingGroup): string {
 export function BudgetRuleChart({ breakdown }: { breakdown: RuleBreakdown }) {
   if (breakdown.income === 0) {
     return (
-      <p className="text-sm text-ink-muted">
+      <p className="text-ink-muted">
         Registra un ingreso en este mes para ver cómo se reparte.
       </p>
     );
@@ -36,16 +36,16 @@ export function BudgetRuleChart({ breakdown }: { breakdown: RuleBreakdown }) {
           const reference = BUDGET_RULE[row.key];
           return (
             <li key={row.key}>
-              <div className="flex flex-wrap items-baseline justify-between gap-x-3 text-sm">
-                <span className="text-ink">{row.label}</span>
+              <div className="flex flex-wrap items-baseline justify-between gap-x-3 text-[0.9375rem]">
+                <span className="font-bold text-ink">{row.label}</span>
                 <span className="tabular-nums text-ink-muted">
-                  <span className="font-medium text-ink">{formatPercent(share)}</span> del ingreso
+                  <span className="font-bold text-ink">{formatPercent(share)}</span> del ingreso
                   · {formatMoney(amount)} · referencia {formatPercent(reference)}
                 </span>
               </div>
-              <div className="relative mt-2 h-2 rounded-full bg-accent/20">
+              <div className="relative mt-2 h-3 rounded-sm bg-rule">
                 <div
-                  className="h-full rounded-full bg-accent"
+                  className="h-full rounded-sm bg-accent"
                   style={{ width: `${Math.min(Math.max(share, 0), 100)}%` }}
                 />
                 {/* Reference mark, ringed in the surface color so it stays visible over the fill */}
@@ -60,7 +60,7 @@ export function BudgetRuleChart({ breakdown }: { breakdown: RuleBreakdown }) {
         })}
       </ul>
 
-      <p className="text-xs text-ink-muted">
+      <p className="text-sm text-ink-muted">
         Necesidades: {categoriesIn("needs")}. Gustos: {categoriesIn("wants")}. Ahorro: lo que
         queda del ingreso después de los gastos.
       </p>

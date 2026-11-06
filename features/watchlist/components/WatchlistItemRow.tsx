@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ghostButtonClassName, iconButtonClassName } from "@/core/components/buttonStyles";
+import { iconButtonClassName, outlineButtonClassName } from "@/core/components/buttonStyles";
+import { sheetClassName } from "@/core/components/surfaces";
 import { PencilIcon, TrashIcon } from "@/core/components/icons";
 import { formatDateKey, type DateKey } from "@/core/lib/dates";
 import { mediaTypeLabel, statusLabel } from "../constants";
@@ -21,8 +22,7 @@ function nextSteps(item: WatchlistItem): { status: WatchStatus; label: string }[
   return [];
 }
 
-const cardClassName =
-  "rounded-2xl border border-border bg-paper-elevated shadow-[0_1px_2px_rgba(20,32,43,0.05)]";
+
 
 type WatchlistItemRowProps = {
   item: WatchlistItem;
@@ -53,7 +53,7 @@ export function WatchlistItemRow({
 
   if (editing) {
     return (
-      <li className={`${cardClassName} col-span-full p-4`}>
+      <li className={`${sheetClassName} col-span-full p-5 md:p-6`}>
         <WatchlistItemForm
           initial={item}
           defaultMediaType={item.mediaType}
@@ -81,7 +81,7 @@ export function WatchlistItemRow({
     : statusLabel(item.status, item.mediaType);
 
   return (
-    <li className={`${cardClassName} flex flex-col gap-2 p-2.5`}>
+    <li className="flex flex-col gap-2">
       <div className="relative">
         <Poster
           url={item.posterUrl}
@@ -90,7 +90,7 @@ export function WatchlistItemRow({
           sizes="(min-width: 768px) 14rem, 50vw"
         />
         {/* Always visible, not on hover: phones have no hover */}
-        <div className="absolute right-1.5 top-1.5 flex gap-0.5 rounded-lg bg-paper-elevated/90 shadow-sm backdrop-blur">
+        <div className="absolute top-1.5 right-1.5 flex gap-0.5 rounded-lg border border-border bg-paper-elevated/95 backdrop-blur">
           <button
             type="button"
             onClick={onStartEdit}
@@ -110,18 +110,18 @@ export function WatchlistItemRow({
         </div>
       </div>
 
-      <div className="min-w-0 px-0.5">
-        <p className="line-clamp-2 font-medium leading-snug text-ink">{item.title}</p>
+      <div className="min-w-0">
+        <p className="line-clamp-2 text-[1.0625rem] leading-snug font-bold text-ink">{item.title}</p>
         {item.releaseYear && (
-          <p className="text-xs tabular-nums text-ink-muted">{item.releaseYear}</p>
+          <p className="text-sm tabular-nums text-ink-muted">{item.releaseYear}</p>
         )}
-        <p className="mt-0.5 text-xs text-ink-muted">
+        <p className="mt-0.5 text-sm text-ink-muted">
           {mediaTypeLabel(item.mediaType)} · {status}
         </p>
       </div>
 
       {item.note && (
-        <p className="line-clamp-3 px-0.5 text-sm italic text-ink-muted">“{item.note}”</p>
+        <p className="line-clamp-3 text-sm text-ink-muted italic">“{item.note}”</p>
       )}
 
       {item.status === "done" ? (
@@ -133,14 +133,14 @@ export function WatchlistItemRow({
           disabled={saving}
         />
       ) : (
-        <div className="-ml-2.5 flex flex-col items-start">
+        <div className="flex flex-col items-start">
           {nextSteps(item).map((step) => (
             <button
               key={step.status}
               type="button"
               onClick={() => run(() => onChangeStatus(step.status))}
               disabled={saving}
-              className={ghostButtonClassName}
+              className={outlineButtonClassName}
             >
               {step.label}
             </button>

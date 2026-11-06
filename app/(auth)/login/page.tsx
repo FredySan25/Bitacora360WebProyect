@@ -86,9 +86,12 @@ export default function LoginPage() {
         </form>
       </AuthCard>
 
-      <p className="mt-6 text-center text-sm text-ink-muted">
+      <p className="mt-6 text-center text-[0.9375rem] text-ink-muted">
         ¿No tienes cuenta?{" "}
-        <Link href="/register" className="font-medium text-accent hover:text-accent-hover">
+        <Link
+          href="/register"
+          className="font-bold text-accent underline underline-offset-[3px] hover:text-accent-hover"
+        >
           Regístrate
         </Link>
       </p>

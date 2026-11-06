@@ -31,7 +31,7 @@ export function StarRating({ label, hideLabel, value, onChange, disabled }: Star
 
   return (
     <fieldset disabled={disabled}>
-      <legend className={hideLabel ? "sr-only" : "mb-1.5 text-sm font-medium text-ink"}>
+      <legend className={hideLabel ? "sr-only" : "mb-1.5 text-sm font-bold text-ink"}>
         {label}
       </legend>
       <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -52,7 +52,7 @@ export function StarRating({ label, hideLabel, value, onChange, disabled }: Star
               />
               <StarIcon
                 className={`h-6 w-6 transition-colors ${
-                  stars <= shown ? "text-warning" : "text-ink-muted/40"
+                  stars <= shown ? "text-warning" : "text-ink-muted/60"
                 }`}
                 fill={stars <= shown ? "currentColor" : "none"}
               />

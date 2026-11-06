@@ -15,6 +15,7 @@ import { PasswordField } from "@/core/components/PasswordField";
 import { SubmitButton } from "@/core/components/SubmitButton";
 import { TextField } from "@/core/components/TextField";
 import { MailIcon } from "@/core/components/icons";
+import { sheetClassName } from "@/core/components/surfaces";
 
 // Each Supabase project picks its own email OTP length, anywhere from 6 to 10 digits
 const CODE_MIN_LENGTH = 6;
@@ -66,18 +67,18 @@ function VerifyEmailCard({ email }: { email: string }) {
   }
 
   return (
-    <div className="rounded-2xl border border-border bg-paper-elevated p-6 text-center shadow-card sm:p-8">
-      <span className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-accent/10 text-accent">
+    <div className={`${sheetClassName} p-6 sm:p-8`}>
+      <span className="mb-4 flex h-13 w-13 items-center justify-center rounded-full bg-highlight text-ink">
         <MailIcon className="h-6 w-6" />
       </span>
-      <h2 className="font-display text-2xl font-semibold text-ink">Revisa tu email</h2>
-      <p className="mt-2 text-sm text-ink-muted">
+      <h2 className="font-display text-4xl leading-none font-bold text-ink">Revisa tu email</h2>
+      <p className="mt-3 text-[0.9375rem] text-ink-muted">
         Te enviamos un código y un enlace de confirmación a{" "}
-        <strong className="font-medium text-ink">{email}</strong>. Escribe el código aquí
+        <strong className="font-bold text-ink">{email}</strong>. Escribe el código aquí
         o abre el enlace para activar tu cuenta.
       </p>
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4 text-left">
+      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
         <TextField
           label="Código de verificación"
           inputMode="numeric"
@@ -87,14 +88,14 @@ function VerifyEmailCard({ email }: { email: string }) {
           maxLength={CODE_MAX_LENGTH}
           required
           disabled={loading}
-          className="text-center font-mono text-lg tracking-[0.3em]"
+          className="font-mono text-2xl tracking-[0.3em]"
           value={code}
           onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
         />
 
         {error && <FormAlert message={error} />}
         {notice && (
-          <p role="status" className="text-sm text-ink-muted">
+          <p role="status" className="text-sm text-ink">
             {notice}
           </p>
         )}
@@ -104,20 +105,23 @@ function VerifyEmailCard({ email }: { email: string }) {
         </SubmitButton>
       </form>
 
-      <p className="mt-4 text-xs text-ink-muted">
+      <p className="mt-5 text-sm text-ink-muted">
         ¿No te llegó? Revisa tu carpeta de spam o{" "}
         <button
           type="button"
           onClick={handleResend}
           disabled={resending || loading}
-          className="font-medium text-accent hover:text-accent-hover disabled:opacity-60"
+          className="font-bold text-accent underline underline-offset-[3px] hover:text-accent-hover disabled:opacity-60"
         >
           {resending ? "Reenviando..." : "Reenviar código"}
         </button>
       </p>
-      <p className="mt-2 text-xs text-ink-muted">
+      <p className="mt-2 text-sm text-ink-muted">
         ¿Ya confirmaste con el enlace?{" "}
-        <Link href="/login" className="font-medium text-accent hover:text-accent-hover">
+        <Link
+          href="/login"
+          className="font-bold text-accent underline underline-offset-[3px] hover:text-accent-hover"
+        >
           Ir a iniciar sesión
         </Link>
       </p>
@@ -203,7 +207,10 @@ export default function RegisterPage() {
 
       <p className="mt-6 text-center text-sm text-ink-muted">
         ¿Ya tienes cuenta?{" "}
-        <Link href="/login" className="font-medium text-accent hover:text-accent-hover">
+        <Link
+          href="/login"
+          className="font-bold text-accent underline underline-offset-[3px] hover:text-accent-hover"
+        >
           Inicia sesión
         </Link>
       </p>

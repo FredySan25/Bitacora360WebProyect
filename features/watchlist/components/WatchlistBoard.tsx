@@ -6,6 +6,11 @@ import { outlineButtonClassName } from "@/core/components/buttonStyles";
 import { ConfirmDialog } from "@/core/components/ConfirmDialog";
 import { FormAlert } from "@/core/components/FormAlert";
 import { PlusIcon } from "@/core/components/icons";
+import {
+  emptyStateClassName,
+  ruledHeadingClassName,
+  sheetClassName,
+} from "@/core/components/surfaces";
 import { todayKey } from "@/core/lib/dates";
 import { MEDIA_TYPES } from "../constants";
 import { useWatchlist } from "../hooks/useWatchlist";
@@ -29,11 +34,14 @@ const SECTIONS: { status: WatchStatus; title: string }[] = [
   { status: "done", title: "Terminados" },
 ];
 
-// As many 10rem columns as fit: two on a phone, more as the screen grows
-const gridClassName = "grid grid-cols-[repeat(auto-fill,minmax(10rem,1fr))] gap-3 sm:gap-4";
+// A shelf of covers: as many 10rem columns as fit, two on a phone. What's in
+// progress gets bigger covers, so it stands out at the top
+function gridClassName(status: WatchStatus): string {
+  const column = status === "in_progress" ? "minmax(12rem,1fr)" : "minmax(10rem,1fr)";
+  return `grid grid-cols-[repeat(auto-fill,${column})] gap-x-4 gap-y-7 sm:gap-x-5`;
+}
 
-const emptyClassName =
-  "rounded-2xl border border-dashed border-rule px-4 py-6 text-center text-sm text-ink-muted";
+const emptyClassName = emptyStateClassName;
 
 /** Movies, series and books: add, filter by type, move along, rate, edit and delete. */
 export function WatchlistBoard() {
@@ -47,7 +55,7 @@ export function WatchlistBoard() {
   const [deleting, setDeleting] = useState<WatchlistItem | null>(null);
 
   if (status === "loading") {
-    return <p className="text-sm text-ink-muted">Cargando tu lista...</p>;
+    return <p className="text-ink-muted">Cargando tu lista...</p>;
   }
   if (status === "error") {
     return (
@@ -67,20 +75,21 @@ export function WatchlistBoard() {
   const filterLabel = FILTER_OPTIONS.find((option) => option.value === filter)?.label ?? "";
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-10">
       {actionError && <FormAlert message={actionError} />}
 
       <SegmentedChoice
         legend="Filtrar por tipo"
         hideLegend
+        look="tabs"
         options={FILTER_OPTIONS}
         value={filter}
         onChange={setFilter}
       />
 
       {creating ? (
-        <section className="rounded-2xl border border-border bg-paper-elevated p-4">
-          <h2 className="mb-3 font-display text-lg font-semibold text-ink">Nuevo título</h2>
+        <section className={`${sheetClassName} p-5 md:p-6`}>
+          <h2 className="mb-4 font-display text-[1.3125rem] font-bold text-ink">Nuevo título</h2>
           <WatchlistItemForm
             defaultMediaType={filter === "all" ? "movie" : filter}
             today={today}
@@ -105,11 +114,11 @@ export function WatchlistBoard() {
 
       {shown.length > 0 ? (
         shown.map((section) => (
-          <section key={section.status} className="flex flex-col gap-3">
-            <h2 className="text-xs font-semibold uppercase tracking-widest text-ink-muted">
+          <section key={section.status} className="flex flex-col gap-5">
+            <h2 className={ruledHeadingClassName}>
               {section.title} ({groups[section.status].length})
             </h2>
-            <ul className={gridClassName}>
+            <ul className={gridClassName(section.status)}>
               {groups[section.status].map((item) => (
                 <WatchlistItemRow
                   key={item.id}
@@ -142,9 +151,12 @@ export function WatchlistBoard() {
         </p>
       )}
 
-      <p className="text-xs text-ink-muted">
+      <p className="text-sm text-ink-muted">
         Pósters y datos de TMDB, Google Books y Open Library ·{" "}
-        <Link href="/about" className="underline underline-offset-2 hover:text-ink">
+        <Link
+          href="/about"
+          className="font-bold text-accent underline underline-offset-[3px] hover:text-accent-hover"
+        >
           Créditos
         </Link>
       </p>

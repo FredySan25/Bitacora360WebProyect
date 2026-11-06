@@ -114,12 +114,12 @@ export function TitleCombobox({
       />
 
       <div
-        className={`absolute inset-x-0 top-full z-30 mt-1 overflow-hidden rounded-xl border border-border bg-paper-elevated shadow-card ${
+        className={`absolute inset-x-0 top-full z-30 mt-1 overflow-hidden rounded-sheet border-[1.5px] border-ink bg-paper-elevated ${
           expanded || message ? "" : "hidden"
         }`}
       >
         {message && (
-          <p role="status" className="px-3 py-2.5 text-sm text-ink-muted">
+          <p role="status" className="px-3 py-2.5 text-[0.9375rem] text-ink-muted">
             {message}
           </p>
         )}
@@ -142,7 +142,7 @@ export function TitleCombobox({
                 onClick={() => pick(result)}
                 onMouseEnter={() => setActive(index)}
                 className={`flex cursor-pointer items-center gap-3 px-3 py-2 ${
-                  index === active ? "bg-accent/10" : ""
+                  index === active ? "bg-highlight" : ""
                 }`}
               >
                 <Poster
@@ -154,10 +154,10 @@ export function TitleCombobox({
                   className="w-10 shrink-0 rounded-md"
                 />
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate text-sm font-medium text-ink">
+                  <span className="block truncate font-bold text-ink">
                     {result.title}
                   </span>
-                  <span className="block truncate text-xs text-ink-muted">
+                  <span className="block truncate text-sm text-ink-muted">
                     {[result.year, result.byline].filter(Boolean).join(" · ")}
                   </span>
                 </span>

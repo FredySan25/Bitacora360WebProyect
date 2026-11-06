@@ -5,6 +5,7 @@ import { iconButtonClassName } from "@/core/components/buttonStyles";
 import { CheckIcon, CloseIcon, PencilIcon, TrashIcon } from "@/core/components/icons";
 import { SubmitButton } from "@/core/components/SubmitButton";
 import { TextField } from "@/core/components/TextField";
+import { itemHeadingClassName, sheetClassName } from "@/core/components/surfaces";
 import { formatDateKey, monthOf, type DateKey } from "@/core/lib/dates";
 import { MAX_AMOUNT } from "../constants";
 import { formatMoney, formatPercent } from "../format";
@@ -65,8 +66,7 @@ export function GoalCard({
   const [contributedOn, setContributedOn] = useState(today);
   const [saving, setSaving] = useState(false);
 
-  const cardClassName =
-    "rounded-2xl border border-border bg-paper-elevated p-5 shadow-[0_1px_2px_rgba(20,32,43,0.05)]";
+  const cardClassName = `${sheetClassName} p-5 md:p-6`;
 
   if (editing) {
     return (
@@ -100,9 +100,9 @@ export function GoalCard({
     <li className={cardClassName}>
       <header className="flex items-start gap-2">
         <div className="min-w-0 flex-1">
-          <h3 className="truncate font-display text-lg font-semibold text-ink">{goal.name}</h3>
+          <h3 className={`truncate ${itemHeadingClassName} md:text-[1.75rem]`}>{goal.name}</h3>
           {goal.targetDate && (
-            <p className="text-xs text-ink-muted">Para el {formatDay(goal.targetDate)}</p>
+            <p className="text-sm text-ink-muted">Para el {formatDay(goal.targetDate)}</p>
           )}
         </div>
         <button
@@ -123,9 +123,9 @@ export function GoalCard({
         </button>
       </header>
 
-      <p className="mt-3 text-2xl font-semibold text-ink">
+      <p className="mt-3 font-display text-[2.5rem] leading-tight font-bold text-ink tabular-nums">
         {formatMoney(saved)}{" "}
-        <span className="text-sm font-normal text-ink-muted">
+        <span className="font-sans text-[1.0625rem] font-normal tracking-normal text-ink-muted">
           de {formatMoney(goal.targetAmount)}
         </span>
       </p>
@@ -136,29 +136,29 @@ export function GoalCard({
         aria-valuemax={100}
         aria-valuenow={percent}
         aria-valuetext={formatPercent(percent)}
-        className="mt-2 h-2 overflow-hidden rounded-full bg-accent/20"
+        className="mt-3 h-2.5 overflow-hidden rounded-sm bg-rule"
       >
         <div
-          className="h-full rounded-full bg-accent transition-[width]"
+          className={`h-full transition-[width] motion-reduce:transition-none ${reached ? "bg-positive" : "bg-accent"}`}
           style={{ width: `${percent}%` }}
         />
       </div>
-      <p className="mt-1.5 flex flex-wrap items-center gap-x-1 text-xs text-ink-muted">
+      <p className="mt-2 flex flex-wrap items-center gap-x-1 text-[0.9375rem] text-ink-muted tabular-nums">
         <span>{formatPercent(percent)} ·</span>
         {reached ? (
-          <span className="inline-flex items-center gap-1 font-medium text-ink">
-            <CheckIcon className="h-3.5 w-3.5 text-positive" />
+          <span className="inline-flex items-center gap-1 font-bold text-ink">
+            <CheckIcon className="h-4 w-4 text-positive" />
             Meta cumplida
           </span>
         ) : (
           <span>Te faltan {formatMoney(remaining)}</span>
         )}
       </p>
-      {hint && <p className="mt-0.5 text-xs text-ink-muted">{hint}</p>}
+      {hint && <p className="mt-0.5 text-[0.9375rem] text-ink-muted tabular-nums">{hint}</p>}
 
       <form
         onSubmit={handleSubmit}
-        className="mt-4 grid grid-cols-2 items-end gap-3 border-t border-border pt-4 sm:grid-cols-[minmax(0,1fr)_10rem_auto]"
+        className="mt-5 grid grid-cols-2 items-end gap-3 border-t border-rule pt-4 sm:grid-cols-[minmax(0,1fr)_11rem_auto]"
       >
         <TextField
           label="Aporte"
@@ -191,16 +191,16 @@ export function GoalCard({
 
       {goal.contributions.length > 0 && (
         <details className="mt-4">
-          <summary className="cursor-pointer text-sm font-medium text-ink-muted hover:text-ink">
+          <summary className="flex min-h-11 cursor-pointer items-center text-[0.9375rem] font-bold text-ink-muted hover:text-ink">
             Aportes ({goal.contributions.length})
           </summary>
-          <ul className="mt-2 divide-y divide-border">
+          <ul className="divide-y divide-rule border-t border-rule">
             {goal.contributions.map((contribution) => (
-              <li key={contribution.id} className="flex items-center gap-2 py-1.5 text-sm">
+              <li key={contribution.id} className="flex items-center gap-2 py-1">
                 <span className="flex-1 text-ink-muted">
                   {formatDay(contribution.contributedOn)}
                 </span>
-                <span className="font-medium tabular-nums text-ink">
+                <span className="font-bold tabular-nums text-ink">
                   {formatMoney(contribution.amount)}
                 </span>
                 <button

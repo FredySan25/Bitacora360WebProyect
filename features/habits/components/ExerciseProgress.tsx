@@ -87,7 +87,7 @@ export function ExerciseProgress({ exercises, workouts }: ExerciseProgressProps)
   return (
     <figure>
       <div className="mb-4 flex flex-col gap-1.5 sm:max-w-xs">
-        <label htmlFor={selectId} className="text-sm font-medium text-ink">
+        <label htmlFor={selectId} className="text-sm font-bold text-ink">
           Ejercicio
         </label>
         <select
@@ -108,10 +108,10 @@ export function ExerciseProgress({ exercises, workouts }: ExerciseProgressProps)
       </div>
 
       <figcaption className="mb-4 flex flex-wrap items-baseline gap-x-2" aria-live="polite">
-        <span className="text-2xl font-semibold text-ink">
+        <span className="font-display text-[2rem] font-bold text-ink tabular-nums">
           {formatNumber(valueOf(shown))} {unit}
         </span>
-        <span className="text-xs text-ink-muted">
+        <span className="text-sm text-ink-muted">
           {formatDateKey(shown.day, { day: "numeric", month: "short", year: "numeric" })}
           {usesWeight && ` · ${formatSet(shown.top)}`} · Mejor marca: {formatNumber(best)} {unit}
         </span>
@@ -119,7 +119,7 @@ export function ExerciseProgress({ exercises, workouts }: ExerciseProgressProps)
 
       <div className="flex gap-2">
         {/* Y axis */}
-        <div className="relative h-44 w-8 shrink-0 text-right text-[10px] tabular-nums text-ink-muted">
+        <div className="relative h-44 w-8 shrink-0 text-right text-xs tabular-nums text-ink-muted">
           {ticks.map((tick, i) => (
             <span
               key={tick}
@@ -136,7 +136,7 @@ export function ExerciseProgress({ exercises, workouts }: ExerciseProgressProps)
             {ticks.map((tick, i) => (
               <div
                 key={tick}
-                className="absolute inset-x-0 border-t border-border"
+                className="absolute inset-x-0 border-t border-rule"
                 style={{ bottom: `${100 - i * 50}%` }}
               />
             ))}
@@ -189,7 +189,7 @@ export function ExerciseProgress({ exercises, workouts }: ExerciseProgressProps)
           </div>
 
           {/* X axis */}
-          <div className="mt-2 flex justify-between text-[10px] tabular-nums text-ink-muted">
+          <div className="mt-2 flex justify-between text-xs tabular-nums text-ink-muted">
             <span>{formatDateKey(firstDay, { day: "numeric", month: "short" })}</span>
             {spanDays > 0 && (
               <span>

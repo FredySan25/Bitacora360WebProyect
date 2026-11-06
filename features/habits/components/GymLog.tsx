@@ -1,8 +1,14 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { ghostButtonClassName } from "@/core/components/buttonStyles";
+import { outlineButtonClassName } from "@/core/components/buttonStyles";
 import { FormAlert } from "@/core/components/FormAlert";
+import {
+  emptyStateClassName,
+  ruledHeadingClassName,
+  sectionHeadingClassName,
+  sheetClassName,
+} from "@/core/components/surfaces";
 import { SubmitButton } from "@/core/components/SubmitButton";
 import { TextField } from "@/core/components/TextField";
 import { todayKey } from "@/core/lib/dates";
@@ -31,7 +37,7 @@ function NewWorkoutForm({ onSubmit }: { onSubmit: (input: WorkoutInput) => Promi
   return (
     <form
       onSubmit={handleSubmit}
-      className="grid items-end gap-3 rounded-2xl border border-border bg-paper-elevated p-5 sm:grid-cols-[10rem_minmax(0,1fr)_auto]"
+      className={`grid items-end gap-4 ${sheetClassName} p-5 sm:grid-cols-[12rem_minmax(0,1fr)_auto]`}
     >
       <TextField
         label="Fecha"
@@ -66,7 +72,7 @@ export function GymLog() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   if (status === "loading") {
-    return <p className="text-sm text-ink-muted">Cargando tus entrenamientos...</p>;
+    return <p className="text-ink-muted">Cargando tus entrenamientos...</p>;
   }
   if (status === "error") {
     return (
@@ -82,21 +88,22 @@ export function GymLog() {
   }
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       {actionError && <FormAlert message={actionError} />}
 
       <NewWorkoutForm onSubmit={addWorkout} />
 
+      <div className="grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start">
       {workouts.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-rule px-4 py-6 text-center text-sm text-ink-muted">
+        <p className={emptyStateClassName}>
           Aún no registras entrenamientos. Crea el primero y agrega tus series.
         </p>
       ) : (
         <section>
-          <h2 className="mb-3 text-xs font-semibold uppercase tracking-widest text-ink-muted">
+          <h2 className={`mb-4 ${ruledHeadingClassName} md:text-[1.3125rem]`}>
             Entrenamientos
           </h2>
-          <ul className="flex flex-col gap-4">
+          <ul className="flex flex-col gap-5">
             {workouts.slice(0, visibleCount).map((workout) => (
               <WorkoutCard
                 key={workout.id}
@@ -112,7 +119,7 @@ export function GymLog() {
             <button
               type="button"
               onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
-              className={`mt-3 ${ghostButtonClassName}`}
+              className={`mx-auto mt-4 ${outlineButtonClassName}`}
             >
               Ver más
             </button>
@@ -121,13 +128,14 @@ export function GymLog() {
       )}
 
       {workouts.some((workout) => workout.sets.length > 0) && (
-        <section className="rounded-2xl border border-border bg-paper-elevated p-5">
-          <h2 className="mb-4 text-xs font-semibold uppercase tracking-widest text-ink-muted">
+        <section className={`${sheetClassName} p-5 md:p-6`}>
+          <h2 className={`mb-4 ${sectionHeadingClassName} md:text-[1.3125rem]`}>
             Progreso por ejercicio
           </h2>
           <ExerciseProgress exercises={exercises} workouts={workouts} />
         </section>
       )}
+      </div>
     </div>
   );
 }

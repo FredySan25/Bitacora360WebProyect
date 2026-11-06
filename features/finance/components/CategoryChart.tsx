@@ -14,17 +14,17 @@ export function CategoryChart({ rows }: { rows: CategoryTotal[] }) {
     <ol className="flex flex-col gap-3.5">
       {rows.map((row) => (
         <li key={row.category}>
-          <div className="flex items-baseline justify-between gap-3 text-sm">
+          <div className="flex items-baseline justify-between gap-3 text-[0.9375rem]">
             <span className="truncate text-ink">{categoryLabel("expense", row.category)}</span>
             <span className="shrink-0 tabular-nums text-ink-muted">
-              <span className="font-medium text-ink">{formatMoney(row.total)}</span> ·{" "}
+              <span className="font-bold text-ink">{formatMoney(row.total)}</span> ·{" "}
               {formatPercent(row.share)}
             </span>
           </div>
-          <div className="mt-1.5 h-3">
+          <div className="mt-1.5 h-3.5">
             {/* Keep a sliver visible so a tiny category doesn't look empty */}
             <div
-              className="h-full rounded-r bg-accent"
+              className="h-full rounded-r-sm bg-series-expense"
               style={{ width: `max(${(row.total / largest) * 100}%, 3px)` }}
             />
           </div>

@@ -1,3 +1,9 @@
+import {
+  figureCellClassName,
+  figureValueClassName,
+  labelClassName,
+} from "@/core/components/surfaces";
+
 type StatTileProps = {
   label: string;
   value: string;
@@ -5,13 +11,13 @@ type StatTileProps = {
   detail?: string;
 };
 
-/** A single headline number with its label. */
+/** A single headline number with its label; goes inside a figure row. */
 export function StatTile({ label, value, detail }: StatTileProps) {
   return (
-    <div className="rounded-2xl border border-border bg-paper-elevated p-4">
-      <p className="text-xs font-medium text-ink-muted">{label}</p>
-      <p className="mt-1 text-2xl font-semibold text-ink">{value}</p>
-      {detail && <p className="mt-0.5 truncate text-xs text-ink-muted">{detail}</p>}
+    <div className={figureCellClassName}>
+      <p className={labelClassName}>{label}</p>
+      <p className={figureValueClassName}>{value}</p>
+      {detail && <p className="truncate text-[0.8125rem] text-ink-muted">{detail}</p>}
     </div>
   );
 }

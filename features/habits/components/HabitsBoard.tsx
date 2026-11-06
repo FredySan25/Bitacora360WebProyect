@@ -7,6 +7,12 @@ import {
   outlineButtonClassName,
 } from "@/core/components/buttonStyles";
 import { FormAlert } from "@/core/components/FormAlert";
+import {
+  emptyStateClassName,
+  listSheetClassName,
+  ruledHeadingClassName,
+  sheetClassName,
+} from "@/core/components/surfaces";
 import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from "@/core/components/icons";
 import { addDays, formatDateKey } from "@/core/lib/dates";
 import { useHabits } from "../hooks/useHabits";
@@ -16,10 +22,8 @@ import { HabitForm } from "./HabitForm";
 import { HabitItem } from "./HabitItem";
 import { ProgressRing } from "./ProgressRing";
 
-/** Archived habits stay as one divided list; active ones are separate cards. */
-const listClassName =
-  "divide-y divide-border rounded-2xl border border-border bg-paper-elevated shadow-[0_1px_2px_rgba(20,32,43,0.05)]";
-const cardListClassName = "flex flex-col gap-2";
+/** The day's habits: one sheet, a ruled row per habit. */
+const cardListClassName = `${listSheetClassName} px-5`;
 
 function dayTitle(day: DateKey, today: DateKey): string {
   if (day === today) return "Hoy";
@@ -48,11 +52,11 @@ function DayNav({ day, today, min, onChange }: DayNavProps) {
       >
         <ChevronLeftIcon className="h-5 w-5" />
       </button>
-      <div className="min-w-28 text-center" aria-live="polite">
-        <p className="font-display text-xl font-semibold leading-tight text-ink first-letter:uppercase">
+      <div className="min-w-36 text-center" aria-live="polite">
+        <p className="font-display text-[1.75rem] leading-tight font-bold text-ink first-letter:uppercase">
           {dayTitle(day, today)}
         </p>
-        <p className="text-xs text-ink-muted">
+        <p className="text-sm text-ink-muted">
           {formatDateKey(day, { day: "numeric", month: "long" })}
         </p>
       </div>
@@ -142,8 +146,9 @@ export function HabitsBoard() {
     <div className="flex flex-col gap-6">
       {actionError && <FormAlert message={actionError} />}
 
+      <div className="grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start">
       <section>
-        <div className="mb-3 flex items-center justify-between gap-3">
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
           <DayNav
             day={day}
             today={today}
@@ -152,8 +157,8 @@ export function HabitsBoard() {
           />
           {scheduled.length > 0 && (
             <div className="flex items-center gap-3">
-              <p className="text-sm text-ink-muted">
-                <span className="text-base font-semibold text-ink">{doneCount}</span> de{" "}
+              <p className="text-[0.9375rem] text-ink-muted tabular-nums">
+                <span className="font-display text-[1.75rem] font-bold text-ink">{doneCount}</span> de{" "}
                 {scheduled.length}
               </p>
               <ProgressRing done={doneCount} total={scheduled.length} />
@@ -164,7 +169,7 @@ export function HabitsBoard() {
         {scheduled.length > 0 ? (
           <ul className={cardListClassName}>{scheduled.map((habit) => renderItem(habit, true))}</ul>
         ) : (
-          <p className="rounded-2xl border border-dashed border-rule px-4 py-6 text-center text-sm text-ink-muted">
+          <p className={emptyStateClassName}>
             {habits.length === 0
               ? "Aún no tienes hábitos. Empieza con uno pequeño."
               : "No hay hábitos programados para este día."}
@@ -172,18 +177,21 @@ export function HabitsBoard() {
         )}
       </section>
 
+      <div className="flex flex-col gap-7 lg:pt-2">
       {unscheduled.length > 0 && (
         <section>
-          <h2 className="mb-2 text-xs font-semibold uppercase tracking-widest text-ink-muted">
+          <h2 className={`mb-1 ${ruledHeadingClassName} md:text-[1.3125rem]`}>
             Otros días
           </h2>
-          <ul className={cardListClassName}>{unscheduled.map((habit) => renderItem(habit, false))}</ul>
+          <ul className="divide-y divide-rule">
+            {unscheduled.map((habit) => renderItem(habit, false))}
+          </ul>
         </section>
       )}
 
       {creating ? (
-        <section className="rounded-2xl border border-border bg-paper-elevated p-4">
-          <h2 className="mb-3 font-display text-lg font-semibold text-ink">Nuevo hábito</h2>
+        <section className={`${sheetClassName} p-5`}>
+          <h2 className="mb-4 font-display text-[1.3125rem] font-bold text-ink">Nuevo hábito</h2>
           <HabitForm
             submitLabel="Crear hábito"
             onSubmit={async (input) => {
@@ -203,13 +211,13 @@ export function HabitsBoard() {
 
       {archivedHabits.length > 0 && (
         <details>
-          <summary className="cursor-pointer text-sm font-medium text-ink-muted hover:text-ink">
+          <summary className="flex min-h-11 cursor-pointer items-center text-[0.9375rem] font-bold text-ink-muted hover:text-ink">
             Archivados ({archivedHabits.length})
           </summary>
-          <ul className={`mt-3 ${listClassName}`}>
+          <ul className="divide-y divide-rule border-t border-rule">
             {archivedHabits.map((habit) => (
-              <li key={habit.id} className="flex flex-wrap items-center gap-2 px-4 py-2.5">
-                <p className="min-w-0 flex-1 truncate text-sm text-ink-muted">{habit.name}</p>
+              <li key={habit.id} className="flex flex-wrap items-center gap-1 py-1.5">
+                <p className="min-w-0 flex-1 truncate text-ink-muted">{habit.name}</p>
                 <button
                   type="button"
                   onClick={() => restoreHabit(habit.id)}
@@ -229,6 +237,8 @@ export function HabitsBoard() {
           </ul>
         </details>
       )}
+      </div>
+      </div>
     </div>
   );
 }

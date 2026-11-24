@@ -19,6 +19,13 @@ import {
   todayKey,
   type MonthKey,
 } from "@/core/lib/dates";
+import {
+  LoadingState,
+  SkeletonControl,
+  SkeletonFigureRow,
+  SkeletonHeading,
+  SkeletonList,
+} from "@/core/components/Skeleton";
 import { categoryLabel } from "../constants";
 import { formatMoney } from "../format";
 import { useSelectedMonth } from "../hooks/useSelectedMonth";
@@ -59,7 +66,17 @@ export function TransactionsBoard() {
   const [savedElsewhere, setSavedElsewhere] = useState<MonthKey | null>(null);
 
   if (status === "loading") {
-    return <p className="text-ink-muted">Cargando tus movimientos...</p>;
+    return (
+      <LoadingState label="Cargando tus movimientos..." className="flex flex-col gap-8">
+        <SkeletonControl className="w-56" />
+        <SkeletonFigureRow cells={3} />
+        <SkeletonControl />
+        <div className="flex flex-col gap-3">
+          <SkeletonHeading />
+          <SkeletonList rows={5} />
+        </div>
+      </LoadingState>
+    );
   }
   if (status === "error") {
     return (

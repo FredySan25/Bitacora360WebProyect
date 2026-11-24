@@ -1,6 +1,7 @@
 "use client";
 
 import { ModuleCard, ModuleCardEmpty } from "@/core/components/ModuleCard";
+import { LoadingState, Skeleton } from "@/core/components/Skeleton";
 import { mediaTypeLabel } from "../constants";
 import { useWatchlist } from "../hooks/useWatchlist";
 import { groupByStatus } from "../items";
@@ -17,7 +18,19 @@ export function WatchlistCard() {
 
   return (
     <ModuleCard title="Watchlist" href="/watchlist">
-      {status === "loading" && <p className="text-ink-muted">Cargando...</p>}
+      {status === "loading" && (
+        <LoadingState label="Cargando..." className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-4 w-20" />
+            <Skeleton className="h-5 w-3/5" />
+            <Skeleton className="h-5 w-2/5" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Skeleton className="h-14 w-24" />
+            <Skeleton className="h-14 w-24" />
+          </div>
+        </LoadingState>
+      )}
 
       {status === "error" && <p className="text-ink-muted">No pudimos cargar tu lista.</p>}
 

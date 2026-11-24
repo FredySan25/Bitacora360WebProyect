@@ -7,6 +7,7 @@ import { FormAlert } from "@/core/components/FormAlert";
 import { PlusIcon } from "@/core/components/icons";
 import { emptyStateClassName, sheetClassName } from "@/core/components/surfaces";
 import { todayKey } from "@/core/lib/dates";
+import { LoadingState, SkeletonControl, SkeletonSheet } from "@/core/components/Skeleton";
 import { formatMoney } from "../format";
 import { useSavingsGoals } from "../hooks/useSavingsGoals";
 import type { SavingsContribution, SavingsGoal } from "../types";
@@ -40,7 +41,15 @@ export function GoalsBoard() {
   const [deleting, setDeleting] = useState<PendingDelete | null>(null);
 
   if (status === "loading") {
-    return <p className="text-ink-muted">Cargando tus metas...</p>;
+    return (
+      <LoadingState label="Cargando tus metas..." className="flex flex-col gap-8">
+        <div className="grid gap-6 lg:grid-cols-2 lg:items-start">
+          <SkeletonSheet className="h-28" />
+          <SkeletonSheet className="h-28" />
+        </div>
+        <SkeletonControl />
+      </LoadingState>
+    );
   }
   if (status === "error") {
     return (

@@ -12,6 +12,7 @@ import {
 import { SubmitButton } from "@/core/components/SubmitButton";
 import { TextField } from "@/core/components/TextField";
 import { todayKey } from "@/core/lib/dates";
+import { LoadingState, SkeletonHeading, SkeletonSheet } from "@/core/components/Skeleton";
 import { useWorkouts } from "../hooks/useWorkouts";
 import type { Workout, WorkoutInput } from "../types";
 import { ExerciseProgress } from "./ExerciseProgress";
@@ -72,7 +73,16 @@ export function GymLog() {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   if (status === "loading") {
-    return <p className="text-ink-muted">Cargando tus entrenamientos...</p>;
+    return (
+      <LoadingState label="Cargando tus entrenamientos..." className="flex flex-col gap-8">
+        <SkeletonSheet className="h-11" />
+        <div className="flex flex-col gap-4 lg:w-3/5">
+          <SkeletonHeading />
+          <SkeletonSheet className="h-24" />
+          <SkeletonSheet className="h-24" />
+        </div>
+      </LoadingState>
+    );
   }
   if (status === "error") {
     return (

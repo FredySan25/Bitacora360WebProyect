@@ -15,6 +15,7 @@ import {
 } from "@/core/components/surfaces";
 import { ChevronLeftIcon, ChevronRightIcon, PlusIcon } from "@/core/components/icons";
 import { addDays, formatDateKey } from "@/core/lib/dates";
+import { LoadingState, Skeleton, SkeletonControl, SkeletonList } from "@/core/components/Skeleton";
 import { useHabits } from "../hooks/useHabits";
 import { completionKey, currentStreak, isScheduledOn } from "../stats";
 import type { DateKey, Habit } from "../types";
@@ -97,7 +98,23 @@ export function HabitsBoard() {
   const [creating, setCreating] = useState(false);
 
   if (status === "loading") {
-    return <p className="text-sm text-ink-muted">Cargando tus hábitos...</p>;
+    return (
+      <LoadingState
+        label="Cargando tus hábitos..."
+        className="grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:items-start"
+      >
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between gap-3">
+            <SkeletonControl className="w-56" />
+            <Skeleton className="h-10 w-24" />
+          </div>
+          <SkeletonList rows={4} />
+        </div>
+        <div className="lg:pt-2">
+          <SkeletonControl />
+        </div>
+      </LoadingState>
+    );
   }
   if (status === "error") {
     return (

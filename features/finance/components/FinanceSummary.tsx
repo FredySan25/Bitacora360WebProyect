@@ -2,6 +2,12 @@
 
 import { FormAlert } from "@/core/components/FormAlert";
 import { addMonths, formatMonth } from "@/core/lib/dates";
+import {
+  LoadingState,
+  SkeletonControl,
+  SkeletonFigureRow,
+  SkeletonSheet,
+} from "@/core/components/Skeleton";
 import { TREND_MONTHS } from "../constants";
 import { useSelectedMonth } from "../hooks/useSelectedMonth";
 import { useTransactions } from "../hooks/useTransactions";
@@ -25,7 +31,14 @@ export function FinanceSummary() {
   const { status, transactions, loadedMonth, refreshing } = useTransactions(month, TREND_MONTHS);
 
   if (status === "loading") {
-    return <p className="text-ink-muted">Cargando tu resumen...</p>;
+    return (
+      <LoadingState label="Cargando tu resumen..." className="flex flex-col gap-8">
+        <SkeletonControl className="w-56" />
+        <SkeletonFigureRow cells={4} />
+        <SkeletonSheet className="h-48" />
+        <SkeletonSheet className="h-48" />
+      </LoadingState>
+    );
   }
   if (status === "error") {
     return (

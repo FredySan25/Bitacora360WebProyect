@@ -7,6 +7,7 @@ import { FormAlert } from "@/core/components/FormAlert";
 import { PlusIcon } from "@/core/components/icons";
 import { emptyStateClassName, listSheetClassName, sheetClassName } from "@/core/components/surfaces";
 import { formatMonth, type MonthKey } from "@/core/lib/dates";
+import { LoadingState, SkeletonControl, SkeletonList } from "@/core/components/Skeleton";
 import { EXPENSE_CATEGORIES, categoryLabel } from "../constants";
 import { useBudgets } from "../hooks/useBudgets";
 import { useSelectedMonth } from "../hooks/useSelectedMonth";
@@ -30,7 +31,13 @@ export function BudgetsBoard() {
   const [deleting, setDeleting] = useState<Budget | null>(null);
 
   if (status === "loading" || spending.status === "loading") {
-    return <p className="text-ink-muted">Cargando tus presupuestos...</p>;
+    return (
+      <LoadingState label="Cargando tus presupuestos..." className="flex flex-col gap-8">
+        <SkeletonControl className="w-56" />
+        <SkeletonList rows={3} withBar />
+        <SkeletonControl />
+      </LoadingState>
+    );
   }
   if (status === "error" || spending.status === "error") {
     return (

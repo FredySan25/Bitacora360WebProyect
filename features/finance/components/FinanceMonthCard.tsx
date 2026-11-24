@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ModuleCard, ModuleCardEmpty } from "@/core/components/ModuleCard";
 import { currentMonth } from "@/core/lib/dates";
+import { LoadingState, Skeleton } from "@/core/components/Skeleton";
 import { formatMoney } from "../format";
 import { useTransactions } from "../hooks/useTransactions";
 import { totalsOf } from "../stats";
@@ -29,7 +30,16 @@ export function FinanceMonthCard() {
   return (
     <ModuleCard title="Finanzas" href="/finance">
       {/* Holds about the height of the summary, so what comes below doesn't jump */}
-      {status === "loading" && <p className="min-h-40 text-ink-muted">Cargando...</p>}
+      {status === "loading" && (
+        <LoadingState label="Cargando..." className="flex min-h-40 flex-col gap-3">
+          <div className="flex flex-col gap-2">
+            <Skeleton className="h-4 w-28" />
+            <Skeleton className="h-12 w-48" />
+          </div>
+          <Skeleton className="h-5 w-full" />
+          <Skeleton className="h-5 w-full" />
+        </LoadingState>
+      )}
 
       {status === "error" && <p className="text-ink-muted">No pudimos cargar tus movimientos.</p>}
 

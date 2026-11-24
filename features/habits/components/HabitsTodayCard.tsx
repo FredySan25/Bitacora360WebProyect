@@ -1,6 +1,7 @@
 "use client";
 
 import { ModuleCard, ModuleCardEmpty } from "@/core/components/ModuleCard";
+import { LoadingState, Skeleton } from "@/core/components/Skeleton";
 import { useHabits } from "../hooks/useHabits";
 import { completionKey, isScheduledOn } from "../stats";
 import { HabitCheckbox } from "./HabitCheckbox";
@@ -18,7 +19,22 @@ export function HabitsTodayCard() {
 
   return (
     <ModuleCard title="Hábitos" href="/habits" framed>
-      {status === "loading" && <p className="text-ink-muted">Cargando...</p>}
+      {status === "loading" && (
+        <LoadingState label="Cargando..." className="flex flex-col gap-4">
+          <div className="flex flex-col gap-3">
+            <Skeleton className="h-12 w-28" />
+            <Skeleton className="h-2 w-full" />
+          </div>
+          <div className="flex flex-col gap-5 py-2.5">
+            {[0, 1, 2].map((row) => (
+              <div key={row} className="flex items-center gap-3.5">
+                <Skeleton className="h-6 w-6 rounded-md" />
+                <Skeleton className={`h-4 ${row === 1 ? "w-1/3" : "w-1/2"}`} />
+              </div>
+            ))}
+          </div>
+        </LoadingState>
+      )}
 
       {status === "error" && <p className="text-ink-muted">No pudimos cargar tus hábitos.</p>}
 

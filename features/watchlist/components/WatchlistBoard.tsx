@@ -12,6 +12,12 @@ import {
   sheetClassName,
 } from "@/core/components/surfaces";
 import { todayKey } from "@/core/lib/dates";
+import {
+  LoadingState,
+  Skeleton,
+  SkeletonControl,
+  SkeletonHeading,
+} from "@/core/components/Skeleton";
 import { MEDIA_TYPES } from "../constants";
 import { useWatchlist } from "../hooks/useWatchlist";
 import { groupByStatus, statusChange } from "../items";
@@ -55,7 +61,24 @@ export function WatchlistBoard() {
   const [deleting, setDeleting] = useState<WatchlistItem | null>(null);
 
   if (status === "loading") {
-    return <p className="text-ink-muted">Cargando tu lista...</p>;
+    return (
+      <LoadingState label="Cargando tu lista..." className="flex flex-col gap-10">
+        <SkeletonControl className="w-80 max-w-full" />
+        <SkeletonControl />
+        <div className="flex flex-col gap-5">
+          <SkeletonHeading />
+          <div className={gridClassName("pending")}>
+            {[0, 1, 2, 3].map((card) => (
+              <div key={card} className="flex flex-col gap-2">
+                <Skeleton className="aspect-[2/3] w-full rounded-[3px_8px_8px_3px]" />
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-3 w-1/2" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </LoadingState>
+    );
   }
   if (status === "error") {
     return (

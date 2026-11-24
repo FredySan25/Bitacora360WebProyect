@@ -10,6 +10,7 @@ import {
   sheetClassName,
 } from "@/core/components/surfaces";
 import { addDays, startOfWeek } from "@/core/lib/dates";
+import { LoadingState, SkeletonFigureRow, SkeletonSheet } from "@/core/components/Skeleton";
 import { useHabits } from "../hooks/useHabits";
 import { bestStreak, currentStreak, percent, rangeTotals, type Totals } from "../stats";
 import { CompletionHeatmap, type DayPoint } from "./CompletionHeatmap";
@@ -44,7 +45,13 @@ export function HabitsProgress() {
   const { status, habits, completions, today, since } = useHabits();
 
   if (status === "loading") {
-    return <p className="text-ink-muted">Cargando tu progreso...</p>;
+    return (
+      <LoadingState label="Cargando tu progreso..." className="flex flex-col gap-8">
+        <SkeletonFigureRow cells={4} />
+        <SkeletonSheet className="h-48" />
+        <SkeletonSheet className="h-32" />
+      </LoadingState>
+    );
   }
   if (status === "error") {
     return (
